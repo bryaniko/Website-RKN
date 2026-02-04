@@ -1,0 +1,4930 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RKN – Rona Karya Nusantara</title>
+    
+    <!-- three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Bootstrap CSS (tidak mengubah desain; CSS kustom tetap di bawah untuk override) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- CSS kustom proyek -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+</head>
+<body>
+    <!-- custom style css -START -->
+    <style>
+        /* Animasi muncul card brand (halus & lambat) */
+        .brand-card {
+            opacity: 0;
+            transform: translateY(48px);
+            transition:
+                opacity 1.1s cubic-bezier(0.34,1.56,0.64,1),
+                transform 1.1s cubic-bezier(0.34,1.56,0.64,1);
+            will-change: opacity, transform;
+        }
+        .brand-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* ANIMASI LOGO SOSIAL MEDIA - DIPERBAIKI */
+        .social-links {
+            margin-top: 1.6rem;
+            display: flex;
+            gap: 0.9rem;
+            justify-content: center;
+            align-items: center;
+            z-index: 11;
+        }
+
+        .social-link {
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(67, 56, 202, 0.12);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none;
+            color: #F5F5F5;
+            opacity: 0;
+            transform: translateY(30px) scale(0.8);
+            animation-duration: 0.8s;
+            animation-fill-mode: forwards;
+            animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            /* PERBAIKAN: Hapus animasi glow yang bermasalah */
+            box-shadow: 0 0 0 rgba(67, 56, 202, 0);
+        }
+
+        /* Animasi untuk setiap icon dengan delay berbeda - DIPERBAIKI */
+        .social-link:nth-child(1) { 
+            animation-name: socialFadeIn; 
+            animation-delay: 1.2s; 
+        }
+        .social-link:nth-child(2) { 
+            animation-name: socialFadeIn; 
+            animation-delay: 1.4s; 
+        }
+        .social-link:nth-child(3) { 
+            animation-name: socialFadeIn; 
+            animation-delay: 1.6s; 
+        }
+        .social-link:nth-child(4) { 
+            animation-name: socialFadeIn; 
+            animation-delay: 1.8s; 
+        }
+
+        @keyframes socialFadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.8) rotate(-10deg);
+                box-shadow: 0 0 0 rgba(67, 56, 202, 0);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(-8px) scale(1.05) rotate(5deg);
+                box-shadow: 0 15px 30px rgba(67, 56, 202, 0.3);
+            }
+            80% {
+                transform: translateY(3px) scale(0.98) rotate(0deg);
+                box-shadow: 0 10px 20px rgba(67, 56, 202, 0.2);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(0deg);
+                box-shadow: 0 8px 25px rgba(67, 56, 202, 0.15);
+            }
+        }
+
+        /* PERBAIKAN: Hapus animasi glow yang bermasalah */
+        /* Efek glow akan ditangani oleh state normal */
+
+        /* Animasi ikon saat masuk */
+        .social-link svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+            fill: currentColor;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* State normal setelah animasi selesai */
+        .social-link {
+            /* Setelah animasi fadeIn selesai, tetap terlihat */
+            box-shadow: 0 8px 25px rgba(67, 56, 202, 0.15);
+        }
+
+        .social-link:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 20px 40px rgba(67, 56, 202, 0.3);
+            border-color: rgba(67, 56, 202, 0.5);
+        }
+
+        .social-link:hover svg {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        /* Animasi background gradient saat hover */
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(67, 56, 202, 0.2), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .social-link:hover::before {
+            left: 100%;
+        }
+
+        .social-link::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(67, 56, 202, 0.1), rgba(123, 58, 237, 0.1));
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        .social-link:hover::after {
+            opacity: 1;
+        }
+
+        .social-link .label {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        /* Responsif untuk animasi */
+        @media (max-width: 768px) {
+            .social-link {
+                width: 42px;
+                height: 42px;
+            }
+            
+            @keyframes socialFadeIn {
+                0% {
+                    opacity: 0;
+                    transform: translateY(20px) scale(0.8);
+                }
+                60% {
+                    opacity: 1;
+                    transform: translateY(-5px) scale(1.05);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+        }
+
+        @media (max-width: 480px) {
+            .social-links {
+                gap: 0.7rem;
+            }
+            
+            .social-link {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .social-link:nth-child(1) { animation-delay: 1.0s; }
+            .social-link:nth-child(2) { animation-delay: 1.1s; }
+            .social-link:nth-child(3) { animation-delay: 1.2s; }
+            .social-link:nth-child(4) { animation-delay: 1.3s; }
+        }
+
+        /* Kode CSS Lainnya (tetap sama) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #212121;
+            color: #F5F5F5;
+            overflow-x: hidden;
+            cursor: none;
+            transition: background 1s ease-in-out;
+        }
+
+        /* Cursor Custom */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e3e1ff;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: 0.15s ease-out;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 12px 3px #bdb7ff88;
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: 0.15s ease-out;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 18px 6px #4338CA44;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(135deg, #e3e0ff, #dbc6ff);
+            border-radius: 10%;
+            pointer-events: none;
+            z-index: 9997;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            to {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        /* Hide cursor on mobile/touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            .cursor-follower,
+            .cursor-trail {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .cursor-follower,
+            .cursor-trail {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+            }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff17;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(67, 56, 202, 0.2);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Header hidden state when scrolling down */
+        header.header-hidden {
+            transform: translateY(-100%);
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .logo-link:hover {
+            transform: scale(1.05);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            color: rgba(255, 255, 255, 0.678);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffffff;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ffffff;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a.active {
+            color: #ffffff;
+        }
+
+        nav a.active::after {
+            width: 100%;
+        }
+
+        /* Mobile Navbar (Burger) */
+        .nav-toggle {
+            display: none;
+            width: 44px;
+            height: 44px;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(67, 56, 202, 0.3);
+            color: #F5F5F5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1001;
+        }
+        
+        .nav-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(67, 56, 202, 0.35);
+            border-color: rgba(67, 56, 202, 0.5);
+            background: rgba(255,255,255,0.12);
+        }
+        
+        .nav-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #F5F5F5;
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-toggle span + span { 
+            margin-top: 5px; 
+        }
+        
+        .nav-toggle.active span:nth-child(1) { 
+            transform: translateY(7px) rotate(45deg); 
+        }
+        
+        .nav-toggle.active span:nth-child(2) { 
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        
+        .nav-toggle.active span:nth-child(3) { 
+            transform: translateY(-7px) rotate(-45deg); 
+        }
+
+        /* Responsive Mobile Navigation - LEFT SIDEBAR */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+
+            .logo {
+                height: 42px;
+            }
+
+            .nav-toggle { 
+                display: flex; 
+            }
+
+            /* Overlay backdrop - tanpa blur */
+            header nav::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.6);
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease, visibility 0.3s ease;
+                z-index: 998;
+                pointer-events: none;
+            }
+
+            header nav.open::before {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+            }
+
+            /* Left Sidebar - Fixed position tetap saat scroll */
+            header nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 300px;
+                max-width: 85vw;
+                height: 100vh;
+                background: linear-gradient(180deg, rgba(30, 30, 45, 0.98) 0%, rgba(20, 20, 35, 0.98) 100%);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border-right: 1px solid rgba(67, 56, 202, 0.5);
+                transform: translateX(-100%);
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 999;
+                box-shadow: 4px 0 30px rgba(0, 0, 0, 0.6);
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            header nav.open {
+                transform: translateX(0);
+            }
+
+            /* Logo in Sidebar */
+            header nav::after {
+                content: '';
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                width: 50px;
+                height: 50px;
+                background-image: url('img/logo/logo-RKN(biru).jpeg');
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+                opacity: 0.25;
+            }
+
+            /* Menu items container */
+            header nav ul {
+                position: relative;
+                top: 0;
+                left: 0;
+                right: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 90px 20px 30px 20px;
+                width: 100%;
+                text-align: left;
+                margin: 0;
+            }
+
+            header nav ul li {
+                opacity: 0;
+                transform: translateX(-30px);
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            header nav.open ul li {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            /* Staggered animation delays */
+            header nav.open ul li:nth-child(1) { transition-delay: 0.1s; }
+            header nav.open ul li:nth-child(2) { transition-delay: 0.15s; }
+            header nav.open ul li:nth-child(3) { transition-delay: 0.2s; }
+            header nav.open ul li:nth-child(4) { transition-delay: 0.25s; }
+            header nav.open ul li:nth-child(5) { transition-delay: 0.3s; }
+
+            /* Menu links styling - Lebih terang */
+            nav a {
+                font-size: 1.05rem;
+                font-weight: 600;
+                padding: 1rem 1.3rem;
+                display: flex;
+                align-items: center;
+                border-radius: 10px;
+                background: rgba(255, 255, 255, 0.08);
+                border: 1px solid rgba(67, 56, 202, 0.35);
+                text-align: left;
+                letter-spacing: 0.5px;
+                position: relative;
+                overflow: hidden;
+                color: rgba(255, 255, 255, 0.9);
+            }
+
+            /* Hover gradient effect */
+            nav a::before {
+                content: '';
+                position: absolute;
+                left: -100%;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(67, 56, 202, 0.3), transparent);
+                transition: left 0.5s ease;
+            }
+
+            nav a:hover::before,
+            nav a.active::before {
+                left: 100%;
+            }
+
+            nav a:hover,
+            nav a.active {
+                background: rgba(67, 56, 202, 0.4);
+                border-color: rgba(67, 56, 202, 0.8);
+                transform: translateX(8px);
+                color: #ffffff;
+                box-shadow: 0 4px 15px rgba(67, 56, 202, 0.4);
+            }
+
+            nav a::after {
+                display: none;
+            }
+
+            /* Accent line for active item */
+            nav a.active {
+                border-left: 3px solid #5b4de8;
+                padding-left: calc(1.3rem - 3px);
+                background: rgba(67, 56, 202, 0.35);
+            }
+        }
+
+        /* Small mobile devices */
+        @media (max-width: 480px) {
+            header {
+                padding: 0.8rem 1rem;
+            }
+
+            .logo {
+                height: 38px;
+            }
+
+            .nav-toggle {
+                width: 40px;
+                height: 40px;
+            }
+
+            .nav-toggle span {
+                width: 20px;
+            }
+
+            header nav {
+                width: 280px;
+            }
+
+            header nav ul {
+                padding: 80px 15px 25px 15px;
+            }
+
+            nav a {
+                font-size: 1rem;
+                padding: 0.9rem 1.1rem;
+            }
+
+            nav a.active {
+                padding-left: calc(1.1rem - 3px);
+            }
+        }
+
+        /* Hide custom cursor on touch devices / mobile */
+        @media (hover: none) and (pointer: coarse) {
+            .cursor-follower,
+            .cursor-trail {
+                display: none !important;
+            }
+        }
+
+        /* Also hide on small screens regardless of pointer type */
+        @media (max-width: 1024px) {
+            .cursor-follower,
+            .cursor-trail {
+                display: none !important;
+            }
+        }
+
+        /* Common section canvas */
+        .section-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #453ec2;
+            overflow: hidden;
+        }
+
+        /* Pattern applied as an overlay via additional pseudo-element */
+        .hero-bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            /* POLA GARIS */
+            background-image: repeating-linear-gradient(
+                -45deg,
+                rgba(255,255,255,0.18),
+                rgba(255,255,255,0.18) 1px,
+                transparent 1px,
+                transparent 10px
+            );
+
+            /* FADE OUT KE BAWAH */
+            -webkit-mask-image: linear-gradient(
+                to bottom,
+                black 0%,
+                black 55%,
+                transparent 100%
+            );
+            mask-image: linear-gradient(
+                to bottom,
+                black 0%,
+                black 55%,
+                transparent 100%
+            );
+
+            opacity: 0.35;
+        }
+
+        /* Responsif dan tema gelap: lembutkan pola di layar kecil */
+        @media (max-width: 992px) {
+            .hero-bg::after {
+                opacity: 0.18;
+                background-image:
+                    repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 22px),
+                    repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 22px);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-bg::after {
+                opacity: 0.12; /* makin halus di mobile */
+            }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 1200px;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 12vw, 9rem);
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            line-height: 0.9;
+            margin-bottom: 1.5rem;
+            background: #fff;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: rgba(245, 245, 245, 0.822);
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            margin-bottom: 3rem;
+            animation: slideUp 1s ease-out 0.2s backwards;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: rgba(245, 245, 245, 0.712);
+            max-width: 600px;
+            font-style: bold;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+            animation: slideUp 1s ease-out 0.4s backwards;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+
+            /* gradient utama */
+            background: linear-gradient(135deg, #4338CA, #7C3AED);
+
+            color: #F5F5F5;
+            text-decoration: none;
+            border-radius: 50px;
+
+            /* BORDER */
+            border: 2px solid rgba(255, 255, 255, 0.35);
+
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 1px;
+
+            position: relative;
+            overflow: hidden;
+
+            transition:
+                transform 0.4s ease,
+                box-shadow 0.4s ease,
+                border-color 0.4s ease;
+
+            animation: slideUp 1s ease-out 0.6s backwards;
+        }
+
+        /* ripple highlight */
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(185, 132, 255, 0.123);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        /* HOVER EFFECT */
+        .cta-btn:hover::before {
+            width: 320px;
+            height: 320px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-4px);
+
+            /* BORDER BERUBAH WARNA */
+            border-color: #a5b4fc65;
+
+            box-shadow: 0 25px 70px rgba(67, 56, 202, 0.45);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(245, 245, 245, 0.4);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            animation: bounce 2s infinite;
+            z-index: 10;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* ========================================
+           PARALLAX FLOATING ELEMENTS
+           ======================================== */
+        .parallax-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .parallax-item {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.25;
+            transition: transform 0.1s linear;
+            will-change: transform;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Individual positioning for each element */
+        .parallax-chili-1 {
+            top: 15%;
+            left: 8%;
+            font-size: 3.5rem;
+            animation: floatSlow 8s ease-in-out infinite;
+            animation-delay: 0s;
+        }
+
+        .parallax-chili-2 {
+            top: 70%;
+            right: 12%;
+            font-size: 3rem;
+            animation: floatSlow 10s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+
+        .parallax-leaf-1 {
+            top: 25%;
+            right: 15%;
+            font-size: 2.8rem;
+            opacity: 0.3;
+            animation: floatMedium 9s ease-in-out infinite;
+            animation-delay: 0.5s;
+        }
+
+        .parallax-leaf-2 {
+            bottom: 25%;
+            left: 10%;
+            font-size: 3.2rem;
+            opacity: 0.28;
+            animation: floatMedium 11s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        .parallax-spice-1 {
+            top: 40%;
+            left: 5%;
+            font-size: 2rem;
+            opacity: 0.35;
+            animation: twinkle 4s ease-in-out infinite;
+            animation-delay: 0s;
+        }
+
+        .parallax-spice-2 {
+            top: 60%;
+            right: 8%;
+            font-size: 2.2rem;
+            opacity: 0.32;
+            animation: twinkle 5s ease-in-out infinite;
+            animation-delay: 1.5s;
+        }
+
+        .parallax-fruit-1 {
+            top: 35%;
+            right: 20%;
+            font-size: 2.5rem;
+            opacity: 0.27;
+            animation: floatFast 7s ease-in-out infinite;
+            animation-delay: 0.8s;
+        }
+
+        .parallax-fruit-2 {
+            bottom: 30%;
+            right: 18%;
+            font-size: 2.8rem;
+            opacity: 0.26;
+            animation: floatFast 8s ease-in-out infinite;
+            animation-delay: 2.5s;
+        }
+
+        .parallax-garnish-1 {
+            top: 50%;
+            left: 15%;
+            font-size: 2.3rem;
+            opacity: 0.3;
+            animation: floatSlow 9.5s ease-in-out infinite;
+            animation-delay: 1.2s;
+        }
+
+        .parallax-garnish-2 {
+            bottom: 20%;
+            right: 25%;
+            font-size: 2.6rem;
+            opacity: 0.29;
+            animation: floatMedium 10.5s ease-in-out infinite;
+            animation-delay: 3s;
+        }
+
+        /* Floating animations with different patterns */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-25px) rotate(5deg); }
+            50% { transform: translateY(-15px) rotate(-3deg); }
+            75% { transform: translateY(-30px) rotate(7deg); }
+        }
+
+        @keyframes floatMedium {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            33% { transform: translateY(-20px) rotate(-8deg) scale(1.05); }
+            66% { transform: translateY(-35px) rotate(5deg) scale(0.98); }
+        }
+
+        @keyframes floatFast {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            25% { transform: translateX(15px) translateY(-20px) rotate(10deg); }
+            50% { transform: translateX(-10px) translateY(-30px) rotate(-5deg); }
+            75% { transform: translateX(20px) translateY(-15px) rotate(8deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.35; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0.6; transform: scale(1.2) rotate(180deg); }
+        }
+
+        /* Responsive adjustments for parallax elements */
+        @media (max-width: 1024px) {
+            .parallax-item {
+                font-size: 2.5rem;
+            }
+            .parallax-chili-1,
+            .parallax-chili-2,
+            .parallax-leaf-2 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .parallax-item {
+                font-size: 2rem;
+                opacity: 0.2;
+            }
+            .parallax-chili-1,
+            .parallax-chili-2,
+            .parallax-leaf-2 {
+                font-size: 2.3rem;
+            }
+            /* Hide some elements on mobile to avoid clutter */
+            .parallax-spice-2,
+            .parallax-garnish-2,
+            .parallax-fruit-2 {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .parallax-item {
+                font-size: 1.5rem;
+                opacity: 0.15;
+            }
+            /* Show only essential elements on small screens */
+            .parallax-leaf-2,
+            .parallax-garnish-1 {
+                display: none;
+            }
+        }
+
+        /* Vision & Mission Section */
+        .vision-mission {
+            padding: 8rem 4rem;
+            position: relative;
+            overflow: hidden;
+
+            background: linear-gradient(
+                to bottom,
+                #453ec2 0%,
+                #998fff 45%,
+                #93b5ff 100%
+            );
+        }
+
+        .vision-mission .content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .vision-mission .section-title h2 {
+            font-size: clamp(2.2rem, 5.6vw, 3.8rem);
+        }
+
+        .vision-card {
+            background: #110a9c44;
+            border: 1px solid rgba(67, 56, 202, 0.2);
+            border-radius: 16px;
+            padding: 2.4rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+        }
+
+
+        .vision-card h3 {
+            font-size: 1.8rem;
+            color: #F5F5F5;
+            margin-bottom: 0.8rem;
+        }
+
+        .vision-card p, .vision-card li {
+            color: rgba(245, 245, 245, 0.877);
+            line-height: 1.85;
+            font-size: 1.12rem;
+        }
+
+        .vision-card ul {
+            padding-left: 1.2rem;
+            margin-top: 0.6rem;
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        @media (max-width: 968px) {
+            .vision-mission .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .vision-card {
+                padding: 2rem;
+            }
+            .vision-card h3 {
+                font-size: 1.5rem;
+            }
+            .vision-card p, .vision-card li {
+                font-size: 1.02rem;
+                line-height: 1.8;
+            }
+            .vision-mission .section-title h2 {
+                font-size: clamp(2rem, 7vw, 3.2rem);
+            }
+        }
+
+        /* Brands Section */
+        .brands {
+            padding: 8rem 4rem;
+            position: relative;
+            background: #212121;
+            overflow: hidden;
+        }
+
+        /* Decorative side brand logos (peeking) on Hero (Beranda) */
+        .hero::before,
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: clamp(160px, 22vw, 360px);
+            aspect-ratio: 1 / 1;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.5;
+            filter: saturate(90%);
+            pointer-events: none;
+            z-index: 1; /* di atas hero-bg (z-index: default 0) tapi di bawah hero-content (z-index:10) */
+            transform: translateY(-50%);
+        }
+
+        .hero::before {
+            left: -6rem; /* sedikit keluar supaya terasa "nyempil" */
+            transform: translateY(-50%) rotate(-8deg) scale(1.02);
+        }
+
+        .hero::after {
+            right: -6rem; /* sedikit keluar supaya terasa "nyempil" */
+            transform: translateY(-50%) rotate(8deg) scale(1.02);
+        }
+
+        /* Responsif: kecilkan/sempunyikan di layar kecil */
+        @media (max-width: 992px) {
+            .hero::before,
+            .hero::after {
+                width: clamp(120px, 28vw, 240px);
+                opacity: 0.07;
+            }
+            .hero::before { left: -4rem; }
+            .hero::after { right: -4rem; }
+        }
+
+        @media (max-width: 640px) {
+            .hero::before,
+            .hero::after {
+                display: none; /* hindari menutupi konten di layar kecil */
+            }
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.8rem;
+            color: #ffffff;
+        }
+
+        .section-title p {
+            color: rgb(255, 255, 255);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .brands-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-card {
+            background: rgba(245, 245, 245, 0.03);
+            border: 1px solid rgba(67, 56, 202, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .brand-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(67, 56, 202, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .brand-card:hover::before {
+            opacity: 1;
+        }
+
+        .brand-card:hover {
+            border-color: rgba(67, 56, 202, 0.6);
+            transform: translateY(-12px) scale(1.02);
+            background: rgba(245, 245, 245, 0.08);
+            box-shadow: 0 30px 80px rgba(67, 56, 202, 0.3);
+        }
+
+        .brand-image {
+            width: 100%;
+            height: 240px;
+            background: linear-gradient(135deg, rgba(67, 56, 202, 0.1), rgba(123, 58, 237, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(245, 245, 245, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .brand-card:hover .brand-image::after {
+            left: 100%;
+        }
+
+        .brand-placeholder {
+            font-size: 4rem;
+            opacity: 0.3;
+        }
+
+        .brand-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease;
+        }
+
+        .brand-card:hover .brand-image img {
+            transform: scale(1.1);
+        }
+
+        .brand-info {
+            padding: 2rem;
+        }
+
+        .brand-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: #F5F5F5;
+        }
+
+        .brand-info p {
+            color: rgba(245, 245, 245, 0.55);
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+            font-size: 0.95rem;
+        }
+
+        .brand-tag {
+        display: inline-block;
+        padding: 6px 16px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.6px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.4);
+        color: #fff;
+        }
+
+        .brand-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.6rem 1.2rem;
+            background: linear-gradient(135deg, #4338CA, #7C3AED);
+            color: #F5F5F5;
+            text-decoration: none;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(67, 56, 202, 0.5);
+        }
+
+        .brand-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(67, 56, 202, 0.35);
+        }
+
+        /* Team Section */
+        .team {
+            padding: 8rem 4rem;
+            background: #212121;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-carousel-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .carousel-btn {
+            display: none;
+        }
+
+        .carousel-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .team-carousel-container {
+            flex: 1;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-radius: 12px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
+        }
+
+        .team-carousel-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .team-carousel-container::-webkit-scrollbar-track {
+            background: rgba(67, 56, 202, 0.1);
+            border-radius: 10px;
+        }
+
+        .team-carousel-container::-webkit-scrollbar-thumb {
+            background: rgba(67, 56, 202, 0.4);
+            border-radius: 10px;
+        }
+
+        .team-carousel-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(67, 56, 202, 0.6);
+        }
+
+        .team-carousel {
+            display: flex;
+            gap: 1.5rem;
+            scroll-behavior: smooth;
+            padding: 1rem 0;
+        }
+
+        .team-member {
+            flex: 0 0 200px;
+            background: rgba(245, 245, 245, 0.02);
+            border: 1px solid rgba(67, 56, 202, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0.7;
+            transform: scale(0.85);
+            cursor: pointer;
+        }
+
+        .team-member:hover {
+            opacity: 0.9;
+            transform: scale(0.95);
+            background: rgba(245, 245, 245, 0.05);
+            border-color: rgba(67, 56, 202, 0.35);
+            box-shadow: 0 12px 40px rgba(67, 56, 202, 0.2);
+        }
+
+        .team-member.active {
+            flex: 0 0 200px;
+            opacity: 1;
+            transform: scale(1);
+            background: rgba(245, 245, 245, 0.08);
+            border-color: rgba(67, 56, 202, 0.5);
+            box-shadow: 0 20px 60px rgba(67, 56, 202, 0.3);
+        }
+
+        .team-member.center {
+            display: none;
+        }
+
+        .team-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            border: 2px solid rgba(67, 56, 202, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .team-member.center .team-photo {
+            width: 80px;
+            height: 80px;
+            border-color: #4338CA;
+            box-shadow: 0 0 25px rgba(67, 56, 202, 0.3);
+        }
+
+        .team-member h3 {
+            font-size: 1.05rem;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            color: #F5F5F5;
+            transition: all 0.5s ease;
+        }
+
+        .team-member.center h3 {
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-title {
+            font-size: 0.8rem;
+            color: #4338CA;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            transition: all 0.5s ease;
+        }
+
+        .team-member.center .job-title {
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .team-member p {
+            color: rgba(245, 245, 245, 0.5);
+            line-height: 1.5;
+            font-size: 0.85rem;
+            transition: all 0.5s ease;
+        }
+
+        .team-member.center p {
+            color: rgba(245, 245, 245, 0.75);
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 8rem 4rem;
+            background: linear-gradient(
+                to bottom,
+                #ffffff 5%,
+                #7C3AED 50%,
+                #212121 100%
+
+            );
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            align-items: flex-start;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-info h3 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #414141;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info > p {
+            color: rgba(65, 65, 65, 0.55);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .address-item {
+            background: rgba(245, 245, 245, 0.02);
+            border: 1px solid rgba(67, 56, 202, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .address-item:hover {
+            border-color: rgba(67, 56, 202, 0.4);
+            background: rgba(245, 245, 245, 0.05);
+            transform: translateX(8px);
+        }
+
+        .address-item h4 {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+        }
+
+        .address-item p {
+            margin: 0;
+            color: rgb(255, 255, 255);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .address-item .visit-link {
+            display: inline-block;
+            margin-top: 0.8rem;
+            color: #00f7ffb9;
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+        }
+
+        .address-item .visit-link:hover {
+            letter-spacing: 0.6px;
+        }
+
+        .map-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(67, 56, 202, 0.15);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(67, 56, 202, 0.1);
+            color: rgba(245, 245, 245, 0.4);
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .brands-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.2rem 2rem;
+            }
+
+            nav ul {
+                gap: 1.2rem;
+            }
+
+            nav a {
+                font-size: 0.85rem;
+            }
+
+            .brands, .team, .contact {
+                padding: 5rem 2rem;
+            }
+
+            .team-carousel-wrapper {
+                gap: 1rem;
+            }
+
+            .carousel-btn {
+                display: none;
+            }
+
+            .team-member {
+                flex: 0 0 120px;
+                padding: 0.9rem;
+            }
+
+            .team-member.center {
+                flex: 0 0 120px;
+            }
+
+            .team-photo {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8rem;
+                margin: 0 auto 0.6rem;
+            }
+
+            .team-member.center .team-photo {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8rem;
+            }
+
+            .team-member h3 {
+                font-size: 0.85rem;
+            }
+
+            .team-member.center h3 {
+                font-size: 0.85rem;
+            }
+
+            .job-title {
+                font-size: 0.65rem;
+                letter-spacing: 0.3px;
+                margin-bottom: 0.4rem;
+            }
+
+            .team-member.center .job-title {
+                font-size: 0.65rem;
+            }
+
+            .team-member p {
+                font-size: 0.65rem;
+                line-height: 1.3;
+            }
+
+            .team-member.center p {
+                font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-carousel-wrapper {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .carousel-btn {
+                width: 36px;
+                height: 36px;
+                order: 3;
+            }
+            .carousel-btn-prev {
+                order: 1;
+            }
+            .carousel-btn-next {
+                order: 2;
+            }
+            .team-carousel-container {
+                order: 0;
+            }
+            .team-member {
+                flex: 0 0 120px;
+                padding: 0.9rem;
+            }
+            .team-member.center {
+                flex: 0 0 150px;
+            }
+            .team-photo {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8rem;
+                margin: 0 auto 0.6rem;
+            }
+            .team-member.center .team-photo {
+                width: 90px;
+                height: 90px;
+                font-size: 2rem;
+            }
+            .team-member h3 {
+                font-size: 0.85rem;
+            }
+            .team-member.center h3 {
+                font-size: 1rem;
+            }
+            .job-title {
+                font-size: 0.7rem;
+                margin-bottom: 0.5rem;
+            }
+            .team-member p {
+                font-size: 0.7rem;
+                line-height: 1.3;
+            }
+        }
+/* ========================================
+   IMPROVED BRAND CAROUSEL - SMOOTH TRANSITION & RESPONSIVE ARROWS
+   Copy code ini dan replace bagian carousel di file style.css Anda
+   ======================================== */
+
+/* Brand Banner Base */
+.brand-banner {
+    min-height: 1100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-inner {
+    height: 1100px;
+}
+
+/* SMOOTH TRANSITION - Ini yang membuat perpindahan smooth */
+.carousel-item {
+    height: 100%;
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.8s ease-in-out;
+}
+
+/* Fade effect saat berganti slide */
+.carousel-item.active {
+    opacity: 1;
+}
+
+
+/* Slide 1 - Bocinyoi (Red/Orange gradient) */
+.brand-slide {
+    background: linear-gradient(135deg, #d32f2f 0%, #ff6f00 50%, #ffa726 100%);
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-slide::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 0.3; }
+}
+
+/* Slide 2 - Alternative brand (Blue/Cyan gradient) */
+.brand-slide-alt {
+    background: linear-gradient(135deg, #1565c0 0%, #00acc1 50%, #26c6da 100%);
+}
+
+/* Slide 3 */
+.brand-slide-green {
+    background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 50%, #81c784 100%);
+}
+
+.brand-slide-yellow {
+    background: linear-gradient(135deg, #e2c35e 0%, #ffd54a 50%, #f5e6ac 100%);
+}
+
+.brand-content {
+    position: relative;
+    z-index: 2;
+}
+
+.brand-tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    animation: fadeInDown 0.8s ease;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.brand-title {
+    font-size: 4.5rem;
+    font-weight: 900;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+    margin: 20px 0;
+    animation: fadeInLeft 1s ease;
+    letter-spacing: 3px;
+}
+
+.brand-description {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    margin: 20px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 1.2s ease;
+}
+
+.brand-logo-container {
+    animation: zoomIn 1s ease;
+    width: 200pt;
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.brand-logo {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease;
+}
+
+.brand-logo:hover {
+    transform: scale(1.05) rotate(1deg);
+}
+
+.btn-brand {
+    background: rgba(255, 255, 255, 0.9);
+    color: #d32f2f;
+    padding: 15px 40px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    animation: fadeInUp 1.4s ease;
+}
+
+.btn-brand:hover {
+    background: white;
+    color: #000000;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.btn-brand-alt {
+    color: #1565c0;
+}
+
+.btn-brand-green {
+    color: #2e7d32;
+}
+
+.btn-brand-yellow {
+    color: #b8a147;
+}
+
+/* ========================================
+   IMPROVED CAROUSEL CONTROLS - RESPONSIVE & FUNCTIONAL
+   ======================================== */
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    opacity: 0.95;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    cursor: pointer;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.95);
+}
+
+.carousel-control-prev:active,
+.carousel-control-next:active {
+    transform: translateY(-50%) scale(0.95);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.carousel-control-prev {
+    left: 30px;
+}
+
+.carousel-control-next {
+    right: 30px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 28px;
+    height: 28px;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    animation: arrowPulse 2s ease-in-out infinite;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    animation: none;
+}
+
+/* Focus state untuk accessibility */
+.carousel-control-prev:focus,
+.carousel-control-next:focus {
+    outline: 3px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 4px;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+    bottom: 35px;
+    margin-bottom: 0;
+    z-index: 15;
+}
+
+.carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background-color: transparent;
+    opacity: 0.6;
+    transition: all 0.4s ease;
+    margin: 0 6px;
+}
+
+.carousel-indicators button.active {
+    opacity: 1;
+    background-color: white;
+    transform: scale(1.4);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.carousel-indicators button:hover {
+    opacity: 0.85;
+    transform: scale(1.2);
+}
+
+/* Decorative elements */
+.chili-icon {
+    position: absolute;
+    font-size: 5rem;
+    opacity: 0.2;
+    animation: float 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+.chili-1 {
+    top: 10%;
+    left: 5%;
+    animation-delay: 0s;
+}
+
+.chili-2 {
+    top: 15%;
+    right: 8%;
+    animation-delay: 2s;
+}
+
+.chili-3 {
+    bottom: 20%;
+    left: 10%;
+    animation-delay: 4s;
+}
+
+.chili-4 {
+    bottom: 15%;
+    right: 12%;
+    animation-delay: 3s;
+}
+
+/* ========================================
+   RESPONSIVE BREAKPOINTS
+   ======================================== */
+
+/* Large Tablet (992px - 1199px) */
+@media (max-width: 1199px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 55px;
+        height: 55px;
+    }
+
+    .carousel-control-prev {
+        left: 25px;
+    }
+
+    .carousel-control-next {
+        right: 25px;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    .brand-title {
+        font-size: 3.5rem;
+    }
+}
+
+/* Tablet (768px - 991px) */
+@media (max-width: 991px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .carousel-control-prev {
+        left: 20px;
+    }
+
+    .carousel-control-next {
+        right: 20px;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .carousel-indicators {
+        bottom: 25px;
+    }
+
+    .carousel-indicators button {
+        width: 10px;
+        height: 10px;
+        margin: 0 5px;
+    }
+
+    .brand-title {
+        font-size: 3rem;
+    }
+
+    .brand-description {
+        font-size: 1.1rem;
+    }
+}
+
+/* Mobile (576px - 767px) */
+@media (max-width: 767px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 45px;
+        height: 45px;
+        background: rgba(255, 255, 255, 0.35);
+        border-width: 2px;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        transform: translateY(-50%) scale(1.08);
+    }
+
+    .carousel-control-prev {
+        left: 15px;
+    }
+
+    .carousel-control-next {
+        right: 15px;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .carousel-indicators {
+        bottom: 20px;
+    }
+
+    .carousel-indicators button {
+        width: 8px;
+        height: 8px;
+        margin: 0 4px;
+    }
+
+    .brand-banner,
+    .carousel-inner {
+        min-height: 500px;
+        height: auto;
+    }
+
+    .brand-title {
+        font-size: 2.5rem;
+    }
+
+    .brand-description {
+        font-size: 1rem;
+    }
+
+    .chili-icon {
+        font-size: 3rem;
+        opacity: 0.15;
+    }
+}
+
+/* Small Mobile (≤ 575px) */
+@media (max-width: 575px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+    }
+
+    .carousel-control-prev {
+        left: 10px;
+    }
+
+    .carousel-control-next {
+        right: 10px;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .carousel-indicators {
+        bottom: 15px;
+    }
+
+    .carousel-indicators button {
+        width: 7px;
+        height: 7px;
+        margin: 0 3px;
+    }
+
+    .brand-title {
+        font-size: 2rem;
+    }
+
+    .btn-brand {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+}
+
+/* Extra Small (≤ 400px) */
+@media (max-width: 400px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 36px;
+        height: 36px;
+    }
+
+    .carousel-control-prev {
+        left: 8px;
+    }
+
+    .carousel-control-next {
+        right: 8px;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .brand-title {
+        font-size: 1.8rem;
+    }
+
+    .chili-1, .chili-3 {
+        display: none;
+    }
+}
+
+/* ========================================
+   TOUCH DEVICE OPTIMIZATION
+   ======================================== */
+
+@media (hover: none) and (pointer: coarse) {
+    .carousel-control-prev,
+    .carousel-control-next {
+        min-width: 44px;
+        min-height: 44px;
+        background: rgba(255, 255, 255, 0.3);
+        animation: none;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .carousel-control-prev:active,
+    .carousel-control-next:active {
+        background: rgba(255, 255, 255, 0.5);
+        transform: translateY(-50%) scale(0.9);
+    }
+}
+        /* ========================================
+           ACTIVITY SECTION STYLES
+           ======================================== */
+        
+        .activity-section {
+            background: #f8f9fa;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Banner Photos Grid - 3 gambar horizontal */
+        .activity-banner-photos {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            height: 350px;
+            gap: 0;
+            width: 100%;
+        }
+
+        .activity-banner-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Content Section */
+        .activity-content-section {
+            padding: 80px 0;
+            background: #ffffff;
+        }
+
+        /* Tag Box - AKTIVITAS */
+        .activity-main-tag {
+            background: linear-gradient(135deg, #998fff 0%, #453ec2 100%);
+            color: white;
+            padding: 18px 45px;
+            display: inline-block;
+            margin-bottom: 60px;
+            box-shadow: 0 6px 20px rgba(37, 99, 168, 0.3);
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .activity-main-tag::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to bottom, rgba(37, 99, 168, 0.1), transparent);
+        }
+
+        .activity-main-tag h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Activity Item Container */
+        .activity-item {
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .activity-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Activity Image */
+        .activity-image-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.4s ease;
+        }
+
+        .activity-image-wrapper:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .activity-image-wrapper img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .activity-image-wrapper:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Activity Badge */
+        .activity-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Activity Content */
+        .activity-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 30px;
+        }
+
+        .activity-date {
+            color: #3498db;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .activity-description {
+            color: #5a6c7d;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+
+        .activity-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #2563a8;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            padding: 12px 30px;
+            border: 2px solid #2563a8;
+            border-radius: 50px;
+            width: fit-content;
+        }
+
+        .activity-link:hover {
+            background: #2563a8;
+            color: white;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(37, 99, 168, 0.3);
+        }
+
+        .activity-link svg {
+            transition: transform 0.3s ease;
+        }
+
+        .activity-link:hover svg {
+            transform: translateX(5px);
+        }
+
+        /* Reverse layout for alternating items */
+        .activity-item:nth-child(even) .row {
+            flex-direction: row-reverse;
+        }
+
+        /* ========================================
+           RESPONSIVE DESIGN
+           ======================================== */
+
+        /* Tablet */
+        @media (max-width: 991px) {
+            .activity-content {
+                padding: 30px 15px 0 15px;
+            }
+
+            .activity-title {
+                font-size: 1.8rem;
+            }
+
+            .activity-item:nth-child(even) .row {
+                flex-direction: column;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .activity-banner-photos {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            .activity-banner-photo {
+                height: 220px;
+            }
+
+            .activity-content-section {
+                padding: 50px 0;
+            }
+
+            .activity-main-tag {
+                padding: 15px 35px;
+                margin-bottom: 40px;
+                width: 100%;
+                text-align: center;
+            }
+
+            .activity-main-tag h2 {
+                font-size: 2rem;
+            }
+
+            .activity-item {
+                margin-bottom: 50px;
+            }
+
+            .activity-image-wrapper img {
+                height: 280px;
+            }
+
+            .activity-content {
+                padding: 25px 10px 0 10px;
+            }
+
+            .activity-title {
+                font-size: 1.6rem;
+            }
+
+            .activity-description {
+                font-size: 0.95rem;
+                text-align: left;
+            }
+
+            .activity-badge {
+                padding: 8px 20px;
+                font-size: 0.8rem;
+            }
+        }
+/* =================================
+   WATER RIPPLE HERO BACKGROUND
+   ================================= */
+
+.ripple-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 80%;
+    border: 1px solid rgb(65, 169, 255);
+    opacity: 0;
+    animation: ripple 4s linear infinite;
+}
+
+/* Posisi & delay berbeda */
+.ripple-1 {
+    top: 30%;
+    left: 15%;
+    animation-delay: 0s;
+}
+
+.ripple-2 {
+    top: 60%;
+    left: 40%;
+    width: 240px;
+    height: 240px;
+    animation-delay: 2s;
+}
+
+.ripple-3 {
+    top: 35%;
+    right: 18%;
+    width: 200px;
+    height: 200px;
+    animation-delay: 4s;
+}
+
+.ripple-4 {
+    bottom: 20%;
+    right: 35%;
+    width: 300px;
+    height: 300px;
+    animation-delay: 6s;
+}
+
+/* Animasi ripple */
+@keyframes ripple {
+    0% {
+        transform: scale(0.4);
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.35;
+    }
+    50% {
+        opacity: 0.15;
+    }
+    100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+        /* Small Mobile */
+        @media (max-width: 576px) {
+            .activity-banner-photo {
+                height: 180px;
+            }
+
+            .activity-main-tag h2 {
+                font-size: 1.7rem;
+            }
+
+            .activity-image-wrapper img {
+                height: 240px;
+            }
+
+            .activity-title {
+                font-size: 1.4rem;
+            }
+
+            .activity-content-section {
+                padding: 40px 0;
+            }
+        }
+
+        /* ===============================
+   FADE IN ON VIEW - VISI MISI
+   =============================== */
+
+
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition:
+        opacity 1s ease-out,
+        transform 1s ease-out;
+}
+
+.fade-in-up.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fade-delay-1 {
+    transition-delay: 0.2s;
+}
+
+.fade-delay-2 {
+    transition-delay: 0.5s;
+}
+
+.fade-delay-3 {
+    transition-delay: 0.8s;
+}
+
+/* ===============================
+   ACTIVITY PARTICLE BACKGROUND
+   =============================== */
+
+.activities {
+    position: relative;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+/* layer partikel */
+.activities::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(99,102,241,0.25) 2px, transparent 2.5px),
+        radial-gradient(circle at 25% 35%, rgba(99,102,241,0.18) 2px, transparent 2.5px),
+        radial-gradient(circle at 40% 60%, rgba(34,197,94,0.22) 2px, transparent 2.5px),
+        radial-gradient(circle at 15% 70%, rgba(99,102,241,0.2) 2px, transparent 2.5px),
+        radial-gradient(circle at 80% 30%, rgba(34,197,94,0.18) 2px, transparent 2.5px),
+        radial-gradient(circle at 70% 55%, rgba(99,102,241,0.2) 2px, transparent 2.5px),
+        radial-gradient(circle at 90% 75%, rgba(34,197,94,0.25) 2px, transparent 2.5px);
+
+    background-repeat: no-repeat;
+    z-index: 0;
+    opacity: 0.8;
+}
+
+/* pastikan konten di atas */
+.activities .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* ===============================
+   HISTORY / SEJARAH SECTION
+   =============================== */
+
+.history-section {
+    padding: 8rem 4rem;
+    position: relative;
+    background: linear-gradient(
+        to bottom,
+        #ffffff 0%,
+        #f8f9ff 20%,
+        #f0f2ff 50%,
+        #f8f9ff 80%,
+        #ffffff 100%
+    );
+    overflow: hidden;
+}
+
+.history-section .section-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.3;
+}
+
+.history-section .section-title {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.history-section .section-title h2 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #4338CA 0%, #5b4de8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.history-section .section-title p {
+    font-size: 1.2rem;
+    color: #64748b;
+    font-weight: 400;
+}
+
+.history-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* Timeline - Responsive Design */
+.timeline {
+    position: relative;
+    padding: 2rem 0;
+}
+
+/* Timeline vertical line - Hidden on mobile */
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(67, 56, 202, 0.3) 10%,
+        rgba(67, 56, 202, 0.3) 90%,
+        transparent
+    );
+    transform: translateX(-50%);
+}
+
+/* Timeline item */
+.timeline-item {
+    position: relative;
+    margin-bottom: 5rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.timeline-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Alternate sides for desktop */
+.timeline-item:nth-child(odd) .timeline-content:first-child {
+    grid-column: 1;
+    text-align: right;
+}
+
+.timeline-item:nth-child(odd) .timeline-date {
+    grid-column: 2;
+}
+
+.timeline-item:nth-child(odd) .timeline-content:last-child {
+    grid-column: 3;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.timeline-item:nth-child(even) .timeline-content:first-child {
+    grid-column: 1;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.timeline-item:nth-child(even) .timeline-date {
+    grid-column: 2;
+}
+
+.timeline-item:nth-child(even) .timeline-content:last-child {
+    grid-column: 3;
+    text-align: left;
+}
+
+/* Timeline date box (center) */
+.timeline-date {
+    background: linear-gradient(135deg, #4338CA 0%, #5b4de8 100%);
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    padding: 1.2rem 1.8rem;
+    min-width: 200px;
+    text-align: center;
+    box-shadow: 
+        0 10px 40px rgba(67, 56, 202, 0.25),
+        0 0 0 8px rgba(67, 56, 202, 0.1);
+    z-index: 2;
+    position: relative;
+}
+
+.timeline-date .day {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+    display: block;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.timeline-date .month-year {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+/* Timeline content */
+.timeline-content {
+    background: #ffffff;
+    border: 2px solid rgba(67, 56, 202, 0.15);
+    border-radius: 20px;
+    padding: 2.5rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(67, 56, 202, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.timeline-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4338CA, #5b4de8, #7c3aed);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.timeline-content:hover::before {
+    transform: scaleX(1);
+}
+
+.timeline-content:hover {
+    border-color: rgba(67, 56, 202, 0.4);
+    box-shadow: 
+        0 12px 40px rgba(67, 56, 202, 0.15),
+        0 0 0 1px rgba(67, 56, 202, 0.1);
+    transform: translateY(-8px);
+}
+
+.timeline-content h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.timeline-content p {
+    font-size: 1.05rem;
+    color: #475569;
+    line-height: 1.8;
+    margin: 0;
+}
+
+/* Decorative connector dots */
+.timeline-date::before,
+.timeline-date::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    background: #ffffff;
+    border: 3px solid #4338CA;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 0 4px rgba(67, 56, 202, 0.1);
+}
+
+.timeline-date::before {
+    left: -38px;
+}
+
+.timeline-date::after {
+    right: -38px;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1200px) {
+    .history-section {
+        padding: 6rem 3rem;
+    }
+
+    .timeline-item {
+        gap: 1.5rem;
+    }
+
+    .timeline-date {
+        min-width: 180px;
+        padding: 1rem 1.5rem;
+    }
+
+    .timeline-date .day {
+        font-size: 2rem;
+    }
+
+    .timeline-content {
+        padding: 2rem;
+    }
+
+    .timeline-content h3 {
+        font-size: 1.6rem;
+    }
+}
+
+/* Responsive - Mobile Layout */
+@media (max-width: 968px) {
+    .history-section {
+        padding: 5rem 2rem;
+    }
+
+    /* Remove center line, add left line */
+    .timeline::before {
+        left: 40px;
+        width: 2px;
+    }
+
+    /* Single column layout */
+    .timeline-item {
+        grid-template-columns: auto 1fr;
+        gap: 2rem;
+        margin-bottom: 4rem;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content:first-child,
+    .timeline-item:nth-child(even) .timeline-content:first-child {
+        display: none;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-date,
+    .timeline-item:nth-child(even) .timeline-date {
+        grid-column: 1;
+        position: relative;
+        min-width: 160px;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content:last-child,
+    .timeline-item:nth-child(even) .timeline-content:last-child {
+        grid-column: 2;
+        visibility: visible;
+        opacity: 1;
+        text-align: left;
+    }
+
+    .timeline-date {
+        padding: 1rem 1.2rem;
+    }
+
+    .timeline-date .day {
+        font-size: 1.8rem;
+    }
+
+    .timeline-date .month-year {
+        font-size: 0.9rem;
+    }
+
+    /* Remove side dots, add single left dot */
+    .timeline-date::before {
+        left: -60px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .timeline-date::after {
+        display: none;
+    }
+
+    .timeline-content {
+        padding: 1.8rem;
+    }
+
+    .timeline-content h3 {
+        font-size: 1.4rem;
+    }
+
+    .timeline-content p {
+        font-size: 1rem;
+    }
+}
+
+/* Responsive - Small Mobile */
+@media (max-width: 640px) {
+    .history-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline-item {
+        grid-template-columns: auto 1fr;
+        gap: 1rem;
+        margin-bottom: 3rem;
+    }
+
+    .timeline-date {
+        min-width: 120px;
+        padding: 0.8rem 1rem;
+    }
+
+    .timeline-date .day {
+        font-size: 1.5rem;
+    }
+
+    .timeline-date .month-year {
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+
+    .timeline-date::before {
+        left: -40px;
+        width: 16px;
+        height: 16px;
+    }
+
+    .timeline-content {
+        padding: 1.5rem;
+    }
+
+    .timeline-content h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .timeline-content p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .history-section {
+        padding: 3rem 1rem;
+    }
+
+    .timeline::before {
+        left: 15px;
+    }
+
+    .timeline-item {
+        gap: 0.8rem;
+    }
+
+    .timeline-date {
+        min-width: 100px;
+        padding: 0.6rem 0.8rem;
+    }
+
+    .timeline-date .day {
+        font-size: 1.3rem;
+    }
+
+    .timeline-date .month-year {
+        font-size: 0.7rem;
+    }
+
+    .timeline-date::before {
+        left: -35px;
+        width: 14px;
+        height: 14px;
+        border-width: 2px;
+    }
+
+    .timeline-content {
+        padding: 1.2rem;
+    }
+
+    .timeline-content h3 {
+        font-size: 1.1rem;
+    }
+
+    .timeline-content p {
+        font-size: 0.9rem;
+    }
+}
+
+    </style>
+    <!-- custom style css -END -->
+
+
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <header>
+        <a href="#home" class="logo-link">
+            <img src="img/logo/logo-RKN(biru).jpeg" alt="Logo RKN" class="logo">
+        </a>
+        <button class="nav-toggle" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span><span></span>
+        </button>
+        <nav id="primary-nav">
+            <ul>
+                <li><a href="#home">BERANDA</a></li>
+                <li><a href="#vision-mission">VISI & MISI</a></li>
+                <li><a href="#brands">DAFTAR BRAND</a></li>
+                <li><a href="#history">SEJARAH</a></li>
+                <!-- <li><a href="#team">TIM KAMI</a></li> -->
+                <li><a href="#activities">KEGIATAN</a></li>
+                <li><a href="#contact">HUBUNGI</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+
+            <!-- WATER RIPPLE -->
+    <div class="ripple-layer">
+        <span class="ripple ripple-1"></span>
+        <span class="ripple ripple-2"></span>
+        <span class="ripple ripple-3"></span>
+        <span class="ripple ripple-4"></span>
+    </div>
+        
+        <div class="hero-content">
+            <h1>RKN</h1>
+            <div class="hero-subtitle">RONA KARYA NUSANTARA</div>
+            <p class="hero-description">
+                Kami menciptakan dan mengembangkan brand-brand inovatif yang memberikan 
+                dampak positif bagi masyarakat Indonesia. Setiap brand adalah karya seni 
+                yang dirancang dengan semangat dan dedikasi.
+            </p>
+            <a href="#brands" class="cta-btn">LIHAT BRAND</a>
+
+            <!-- Social media links -->
+            <div class="social-links" aria-label="Ikuti RKN di media sosial">
+                <a class="social-link" href="https://www.youtube.com/your_channel" target="_blank" rel="noopener noreferrer" aria-label="YouTube RKN">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M23.498 6.186a2.996 2.996 0 0 0-2.107-2.12C19.88 3.5 12 3.5 12 3.5s-7.88 0-9.39.566A2.996 2.996 0 0 0 .503 6.186C0 7.705 0 12 0 12s0 4.295.503 5.814a2.996 2.996 0 0 0 2.107 2.12C4.12 20.5 12 20.5 12 20.5s7.88 0 9.39-.566a2.996 2.996 0 0 0 2.107-2.12C24 16.295 24 12 24 12s0-4.295-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    <span class="label">YouTube</span>
+                </a>
+                
+                <a class="social-link" href="https://www.instagram.com/your_handle" target="_blank" rel="noopener noreferrer" aria-label="Instagram RKN">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.347 3.608 1.322.975.975 1.26 2.242 1.322 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.347 2.633-1.322 3.608-.975.975-2.242 1.26-3.608 1.322-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.347-3.608-1.322-.975-.975-1.26-2.242-1.322-3.608C2.175 15.747 2.163 15.367 2.163 12s.012-3.584.07-4.85c.062-1.366.347-2.633 1.322-3.608.975-.975 2.242-1.26 3.608-1.322C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.78.131 4.648.403 3.678 1.372 2.709 2.341 2.437 3.473 2.378 4.745 2.319 6.025 2.306 6.434 2.306 12s.013 5.975.072 7.255c.059 1.272.331 2.404 1.3 3.373.969.969 2.101 1.241 3.373 1.3 1.28.059 1.689.072 7.255.072s5.975-.013 7.255-.072c1.272-.059 2.404-.331 3.373-1.3.969-.969 1.241-2.101 1.3-3.373.059-1.28.072-1.689.072-7.255s-.013-5.975-.072-7.255c-.059-1.272-.331-2.404-1.3-3.373C20.404.403 19.272.131 18 .072 16.719.013 16.309 0 12 0z"/>
+                        <path d="M12 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998z"/>
+                        <circle cx="18.406" cy="5.594" r="1.44"/>
+                    </svg>
+                    <span class="label">Instagram</span>
+                </a>
+
+                <a class="social-link" href="https://twitter.com/your_handle" target="_blank" rel="noopener noreferrer" aria-label="Twitter RKN">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M23.954 4.569a10 10 0 0 1-2.825.775 4.958 4.958 0 0 0 2.163-2.723 9.993 9.993 0 0 1-3.127 1.195 4.92 4.92 0 0 0-8.384 4.482A13.978 13.978 0 0 1 1.671 3.149a4.822 4.822 0 0 0-.665 2.475 4.92 4.92 0 0 0 2.188 4.1 4.902 4.902 0 0 1-2.228-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.935 4.935 0 0 1-2.224.084 4.93 4.93 0 0 0 4.604 3.417A9.868 9.868 0 0 1 .96 19.54a13.94 13.94 0 0 0 7.548 2.212c9.142 0 14.307-7.721 13.995-14.646a9.936 9.936 0 0 0 2.411-2.534z"/>
+                    </svg>
+                    <span class="label">Twitter</span>
+                </a>
+
+                <a class="social-link" href="https://www.linkedin.com/company/your_company" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn RKN">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.85-3.037-1.85 0-2.134 1.445-2.134 2.941v5.665H9.356V9h3.414v1.561h.049c.476-.9 1.637-1.85 3.37-1.85 3.602 0 4.266 2.37 4.266 5.456v6.285zM5.337 7.433c-1.144 0-2.069-.926-2.069-2.069 0-1.144.926-2.069 2.069-2.069 1.144 0 2.069.926 2.069 2.069 0 1.144-.926 2.069-2.069 2.069zM7.119 20.452H3.554V9H7.12v11.452z"/>
+                    </svg>
+                    <span class="label">LinkedIn</span>
+                </a>
+            </div>
+        </div>
+        <div class="scroll-indicator">GULIR</div>
+    </section>
+
+<section class="vision-mission" id="vision-mission">
+    <div class="section-title fade-in-up fade-delay-1">
+        <h2>Visi, Misi & Nilai Perusahaan</h2>
+        <p>Arah, tujuan, dan prinsip yang menjadi fondasi Rona Karya Nusantara</p>
+    </div>
+
+    <div class="content">
+        <div class="vision-card fade-in-up fade-delay-2">
+            <h3>Visi & Misi</h3>
+            <p>
+                <strong>Visi</strong><br>
+            Menciptakan brand-brand unggul, yang bermanfaat dan menginspirasi, serta mengharumkan 
+            Nusantara hingga kancah internasional, demi meraih ridho Allah SWT.
+            </p>
+            <ul>
+                <li><strong>Menciptakan</strong> brand dan produk unggul yang halal, aman, berkualitas, dan bernilai global.</li>
+                <li><strong>Memberikan</strong> manfaat dan inspirasi bagi konsumen serta lingkungan dengan menghadirkan karya yang inovatif dan membawa kebaikan.</li>
+                <li><strong>Menguatkan</strong> ekosistem Nusantara melalui kolaborasi dengan mitra, supplier, dan agen agar tumbuh bersama.</li>
+                <li><strong>Menebar</strong> kebaikan ke dunia internasional, membawa harum nama Nusantara di kancah global..</li>
+                <li><strong>Menjadikan</strong> setiap langkah sebagai ibadah, dengan menumbuhkan nilai spiritualitas dalam diri SDM dan pertumbuhan bisnis..</li>
+            </ul>
+        </div>
+
+        <div class="vision-card fade-in-up fade-delay-2">
+            <h3>Nilai Perusahaan</h3>
+            <p>
+                <strong>Nilai</strong>
+
+            </p>
+                <li><strong>2 Pondasi (BER)</strong>
+            <ul>
+                <li><strong>Beriman</strong> meyakini rukun iman 6 dan selalu berorientasi pada kehidupan akhirat.</li>
+                <li><strong>Berintegritas</strong> menjaga keselarasan pikiran, perkataan, dan perbuatan dengan landasan kebenaran dan kebaikan.</li>
+            </ul>
+                <li><strong>4 Penguat (BER)</strong>
+            <ul>
+                <li><strong>Berjiwa Besar</strong>  menerima dan merespons segala hal dengan lapang dada dan bijaksana.</li>
+                <li><strong>Berinovasi</strong> terus belajar, berkreasi, dan mengembangkan karya baru maupun yang sudah ada.</li>
+                <li><strong>Bersemangat</strong>  menjalani aktivitas dengan energi penuh dan antusiasme..</li>
+                <li><strong>Berorientasi</strong> Konsumen & Lingkungan → mengutamakan kepuasan</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+
+<section class="brand" id="brands">
+    <section class="container-fluid px-0">
+        <div id="brandBanner" class="carousel slide brand-banner " data-bs-ride="carousel" data-bs-interval="3500">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#brandBanner" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#brandBanner" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#brandBanner" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#brandBanner" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            </div>
+
+            <div class="carousel-inner" >
+                <!-- Slide 1 - Bocinyoi -->
+                <div class="carousel-item active">
+                    <div class="brand-slide d-flex align-items-center">
+                        <!-- Decorative chili icons -->
+                        <div class="chili-icon chili-1">🌶️</div>
+                        <div class="chili-icon chili-2">🌶️</div>
+                        <div class="chili-icon chili-3">🌶️</div>
+                        <div class="chili-icon chili-4">🌶️</div>
+
+                        <div class="container brand-content">
+                            <div class="row align-items-center gy-4">
+
+                                <div class="col-md-5 text-center brand-logo-container">
+                                    <img src="img/brand/logo-bocinyoi.jpeg" 
+                                         class="brand-logo" 
+                                         alt="Bocinyoi Logo">
+                                </div>
+
+                                <div class="col-md-7 text-white">
+                                    <span class="brand-tag">🔥 MAKANAN PEDAS</span>
+                                    <h1 class="brand-title">BOCINYOI</h1>
+                                    <p class="brand-description">
+                                        Bocinyoi adalah brand makanan pedas dengan cita rasa ekstrem,
+                                        dibuat dari bahan pilihan dan sambal khas yang menggugah selera.
+                                        Siap menantang lidahmu dengan sensasi pedas yang tak terlupakan!
+                                    </p>
+                                    <a href="brand-nangkring-seblak.html">
+                                    <button  class="btn btn-brand">
+                                        ▶ Kunjungi Sekarang
+                                    </button>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 - Cik Emam -->
+                <div class="carousel-item">
+                    <div class="brand-slide brand-slide-alt d-flex align-items-center">
+                        <div class="container brand-content">
+                            <div class="row align-items-center gy-4">
+
+                                <div class="col-md-5 text-center brand-logo-container">
+                                    <img src="img/brand/logo-CikEmam.png" 
+                                         class="brand-logo" 
+                                         alt="Cik Emam Logo">
+                                </div>
+
+                                <div class="col-md-7 text-white">
+                                    <h1 class="brand-title">CIK EMAM</h1>
+                                    <span class="brand-tag">🥤 MINUMAN SEGAR</span>
+                                    <p class="brand-description">
+                                        Minuman modern dengan rasa unik dan desain kekinian.
+                                        Setiap tegukan membawa kesegaran yang memanjakan lidah
+                                        dengan kombinasi rasa yang inovatif dan menyegarkan.
+                                    </p>
+                                    <button class="btn btn-brand btn-brand-alt" ">
+                                        ▶ Lihat Selengkanya
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 - Brand Tiga -->
+                <div class="carousel-item">
+                    <div class="brand-slide brand-slide-green d-flex align-items-center">
+                        <div class="container brand-content">
+                            <div class="row align-items-center gy-4">
+
+                                <div class="col-md-5 text-center brand-logo-container">
+                                    <img src="img/brand/logo-NangkringSeblak.png" 
+                                         class="brand-logo" 
+                                         alt="Brand 3 Logo">
+                                </div>
+
+                                <div class="col-md-7 text-white">
+                                    <span class="brand-tag">🍃 MAKANAN SEHAT</span>
+                                    <h1 class="brand-title">HEALTHY BITES</h1>
+                                    <p class="brand-description">
+                                        Sajian makanan sehat dengan bahan organik pilihan.
+                                        Cocok untuk gaya hidup modern yang peduli kesehatan
+                                        tanpa mengorbankan kelezatan rasa.
+                                    </p>
+                                    <button class="btn btn-brand btn-brand-green" onclick="visitBrand('Healthy Bites')">
+                                        ▶ Kunjungi Sekarang
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                                <!-- Slide 4 - Brand Empat -->
+                <div class="carousel-item">
+                    <div class="brand-slide brand-slide-yellow d-flex align-items-center">
+                        <div class="container brand-content">
+                            <div class="row align-items-center gy-4">
+
+                                <div class="col-md-5 text-center brand-logo-container">
+                                    <img src="img/brand/logo-OkiPokki.png" 
+                                         class="brand-logo" 
+                                         alt="Brand 3 Logo">
+                                </div>
+
+                                <div class="col-md-7 text-white">
+                                    <h1 class="brand-title">OKIPOKKI</h1>
+                                    <span class="brand-tag">🍃 MAKANAN SEHAT</span>
+                                    <p class="brand-description">
+                                        Sajian makanan sehat dengan bahan organik pilihan.
+                                        Cocok untuk gaya hidup modern yang peduli kesehatan
+                                        tanpa mengorbankan kelezatan rasadddddddddddddddd
+                                        dddddddddddddddddddddddddddddd
+                                        dddddddddddddddddddddddddddddddddddddd
+                                        dddddddddddddddddddddddddddddddddddddd
+                                        dwdasdwadddddddddddddddddddddddddd.
+                                    </p>
+                                    <button class="btn btn-brand btn-brand-yellow" onclick="visitBrand('Healthy Bites')">
+                                        ▶ Kunjungi Sekarang
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#brandBanner" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#brandBanner" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+
+
+        </div>
+    </section>
+
+
+<!-- HISTORY SECTION -->
+<section class="history-section" id="history">
+    <canvas class="section-canvas" id="history-canvas"></canvas>
+    
+    <div class="section-title">
+        <h2>Sejarah Perusahaan</h2>
+        <p>Perjalanan Rona Karya Nusantara dalam membangun brand Indonesia</p>
+    </div>
+
+    <div class="history-container">
+        <div class="timeline">
+            
+            <!-- Timeline Item 1 -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Pendirian Perusahaan</h3>
+                    <p>Rona Karya Nusantara resmi didirikan dengan visi menjadi perusahaan kreatif yang menghadirkan brand lokal berkualitas tinggi. Dimulai dengan tim kecil yang penuh semangat dan dedikasi untuk mengembangkan produk Indonesia.</p>
+                </div>
+                <div class="timeline-date">
+                    <span class="day">15</span>
+                    <span class="month-year">Januari 2020</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>Pendirian Perusahaan</h3>
+                    <p>Rona Karya Nusantara resmi didirikan dengan visi menjadi perusahaan kreatif yang menghadirkan brand lokal berkualitas tinggi. Dimulai dengan tim kecil yang penuh semangat dan dedikasi untuk mengembangkan produk Indonesia.</p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 2 -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Peluncuran Brand Pertama</h3>
+                    <p>Meluncurkan brand pertama sebagai langkah awal dalam industri kreatif Indonesia. Brand ini menjadi fondasi pengalaman kami dalam memahami pasar dan kebutuhan konsumen lokal.</p>
+                </div>
+                <div class="timeline-date">
+                    <span class="day">10</span>
+                    <span class="month-year">Mei 2020</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>Peluncuran Brand Pertama</h3>
+                    <p>Meluncurkan brand pertama sebagai langkah awal dalam industri kreatif Indonesia. Brand ini menjadi fondasi pengalaman kami dalam memahami pasar dan kebutuhan konsumen lokal.</p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 3 -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Ekspansi Produk - Bocinyoi</h3>
+                    <p>Meluncurkan Bocinyoi, brand makanan pedas dengan cita rasa ekstrem yang langsung mendapat sambutan luar biasa dari pecinta kuliner pedas di Indonesia. Produk ini menjadi game-changer dalam portofolio kami.</p>
+                </div>
+                <div class="timeline-date">
+                    <span class="day">22</span>
+                    <span class="month-year">Agustus 2021</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>Ekspansi Produk - Bocinyoi</h3>
+                    <p>Meluncurkan Bocinyoi, brand makanan pedas dengan cita rasa ekstrem yang langsung mendapat sambutan luar biasa dari pecinta kuliner pedas di Indonesia. Produk ini menjadi game-changer dalam portofolio kami.</p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 4 -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Kolaborasi & Kemitraan</h3>
+                    <p>Membangun kolaborasi strategis dengan berbagai mitra bisnis dan supplier lokal untuk memperkuat rantai pasokan dan distribusi produk. Kemitraan ini membuka peluang ekspansi ke berbagai daerah.</p>
+                </div>
+                <div class="timeline-date">
+                    <span class="day">05</span>
+                    <span class="month-year">Maret 2022</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>Kolaborasi & Kemitraan</h3>
+                    <p>Membangun kolaborasi strategis dengan berbagai mitra bisnis dan supplier lokal untuk memperkuat rantai pasokan dan distribusi produk. Kemitraan ini membuka peluang ekspansi ke berbagai daerah.</p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 5 -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Peluncuran Cikemam</h3>
+                    <p>Memperkenalkan Cikemam, minuman segar dengan berbagai varian rasa yang inovatif. Brand ini melengkapi portofolio produk kami dan memperluas jangkauan pasar ke segmen minuman.</p>
+                </div>
+                <div class="timeline-date">
+                    <span class="day">18</span>
+                    <span class="month-year">September 2022</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>Peluncuran Cikemam</h3>
+                    <p>Memperkenalkan Cikemam, minuman segar dengan berbagai varian rasa yang inovatif. Brand ini melengkapi portofolio produk kami dan memperluas jangkauan pasar ke segmen minuman.</p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 6 -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Sertifikasi & Standarisasi</h3>
+                    <p>Mendapatkan sertifikasi halal dan standarisasi kualitas produk untuk memastikan semua brand memenuhi standar nasional dan internasional. Komitmen kami pada kualitas dan kepercayaan konsumen.</p>
+                </div>
+                <div class="timeline-date">
+                    <span class="day">12</span>
+                    <span class="month-year">April 2023</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>Sertifikasi & Standarisasi</h3>
+                    <p>Mendapatkan sertifikasi halal dan standarisasi kualitas produk untuk memastikan semua brand memenuhi standar nasional dan internasional. Komitmen kami pada kualitas dan kepercayaan konsumen.</p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 7 -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Ekspansi Digital</h3>
+                    <p>Meluncurkan platform e-commerce dan memperkuat kehadiran digital melalui berbagai marketplace dan media sosial. Transformasi digital ini membuat produk kami lebih mudah dijangkau konsumen di seluruh Indonesia.</p>
+                </div>
+                <div class="timeline-date">
+                    <span class="day">08</span>
+                    <span class="month-year">November 2023</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>Ekspansi Digital</h3>
+                    <p>Meluncurkan platform e-commerce dan memperkuat kehadiran digital melalui berbagai marketplace dan media sosial. Transformasi digital ini membuat produk kami lebih mudah dijangkau konsumen di seluruh Indonesia.</p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 8 -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Inovasi Produk Berkelanjutan</h3>
+                    <p>Meluncurkan inisiatif keberlanjutan dengan menggunakan kemasan ramah lingkungan dan bahan baku lokal. Komitmen kami terhadap lingkungan dan komunitas lokal.</p>
+                </div>
+                <div class="timeline-date">
+                    <span class="day">20</span>
+                    <span class="month-year">Mei 2024</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>Inovasi Produk Berkelanjutan</h3>
+                    <p>Meluncurkan inisiatif keberlanjutan dengan menggunakan kemasan ramah lingkungan dan bahan baku lokal. Komitmen kami terhadap lingkungan dan komunitas lokal.</p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 9 -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Pencapaian 5 Tahun</h3>
+                    <p>Merayakan 5 tahun perjalanan RKN dengan lebih dari 10 brand aktif, puluhan produk inovatif, dan ribuan konsumen setia di seluruh Indonesia. Terus berkomitmen untuk menghadirkan produk berkualitas dan berdaya saing global.</p>
+                </div>
+                <div class="timeline-date">
+                    <span class="day">15</span>
+                    <span class="month-year">Januari 2025</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>Pencapaian 5 Tahun</h3>
+                    <p>Merayakan 5 tahun perjalanan RKN dengan lebih dari 10 brand aktif, puluhan produk inovatif, dan ribuan konsumen setia di seluruh Indonesia. Terus berkomitmen untuk menghadirkan produk berkualitas dan berdaya saing global.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+    <!-- ========================================
+         ACTIVITY SECTION START
+         ======================================== -->
+    <section class="activities" id="activities">
+
+        <!-- Banner Photos Grid - 3 Gambar Horizontal -->
+        <div class="activity-banner-photos ">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80" alt="Tim Kerja Kreatif" class="activity-banner-photo">
+            <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1200&q=80" alt="Kolaborasi Tim" class="activity-banner-photo">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&q=80" alt="Aktivitas Kantor" class="activity-banner-photo">
+        </div>
+
+        <!-- Content Section -->
+        <div class="activity-content-section">
+            <div class="container">
+                
+                <!-- Tag Box - AKTIVITAS -->
+                <div class="text-center text-lg-start fade-in-up fade-delay-1">
+                    <div class="activity-main-tag">
+                        <h2>KEGIATAN</h2>
+                    </div>
+                </div>
+
+                <!-- Activity Item 1 - Workshop Kreativitas -->
+                <div class="activity-item fade-in-up fade-delay-2">
+                    <div class="row g-4 align-items-center">
+                        <!-- Image -->
+                        <div class="col-lg-6">
+                            <div class="activity-image-wrapper">
+                                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80" alt="Workshop Kreativitas">
+                                <div class="activity-badge">Workshop</div>
+                            </div>
+                        </div>
+                        <!-- Content -->
+                        <div class="col-lg-6">
+                            <div class="activity-content">
+                                <div class="activity-date">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"/>
+                                    </svg>
+                                    15 Januari 2026
+                                </div>
+                                <h3 class="activity-title">Workshop Kreativitas & Inovasi</h3>
+                                <p class="activity-description">
+                                    Pelatihan intensif yang dirancang khusus untuk mengasah kemampuan tim dalam menghasilkan ide-ide kreatif dan inovatif. Dalam workshop ini, peserta belajar teknik brainstorming, design thinking, dan metode-metode terkini untuk mengembangkan brand yang memorable dan impactful.
+                                </p>
+                                <a href="#" class="activity-link">
+                                    Lihat Detail
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Item 2 - Teaching Factory Program -->
+                <div class="activity-item fade-in-up fade-delay-2">
+                    <div class="row g-4 align-items-center">
+                        <!-- Image -->
+                        <div class="col-lg-6">
+                            <div class="activity-image-wrapper">
+                                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="Teaching Factory">
+                                <div class="activity-badge">Kolaborasi</div>
+                            </div>
+                        </div>
+                        <!-- Content -->
+                        <div class="col-lg-6">
+                            <div class="activity-content">
+                                <div class="activity-date">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"/>
+                                    </svg>
+                                    10 Januari 2026
+                                </div>
+                                <h3 class="activity-title">Teaching Factory Program</h3>
+                                <p class="activity-description">
+                                    Program kolaborasi dengan Universitas Komputer Indonesia (UNIKOM) Bandung dan SMK 2 Cimahi untuk mengembangkan talenta baru di industri animasi. Mahasiswa dan siswa mendapat kesempatan langsung belajar dari praktisi industri dan terlibat dalam proyek real production.
+                                </p>
+                                <a href="#" class="activity-link">
+                                    Lihat Detail
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Item 3 - Team Building -->
+                <div class="activity-item fade-in-up fade-delay-2">
+                    <div class="row g-4 align-items-center">
+                        <!-- Image -->
+                        <div class="col-lg-6">
+                            <div class="activity-image-wrapper">
+                                <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&q=80" alt="Team Building">
+                                <div class="activity-badge">Komunitas</div>
+                            </div>
+                        </div>
+                        <!-- Content -->
+                        <div class="col-lg-6">
+                            <div class="activity-content">
+                                <div class="activity-date">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"/>
+                                    </svg>
+                                    5 Januari 2026
+                                </div>
+                                <h3 class="activity-title">Team Building & Gathering</h3>
+                                <p class="activity-description">
+                                    Kegiatan rutin untuk mempererat hubungan antar tim dan meningkatkan semangat kerja. Melalui berbagai aktivitas outdoor yang menyenangkan, games interaktif, dan sesi sharing, kami membangun chemistry tim yang solid dan kultur kerja yang positif untuk mendukung kreativitas maksimal.
+                                </p>
+                                <a href="#" class="activity-link">
+                                    Lihat Detail
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Item 4 - Penghargaan -->
+                <div class="activity-item fade-in-up fade-delay-2">
+                    <div class="row g-4 align-items-center">
+                        <!-- Image -->
+                        <div class="col-lg-6">
+                            <div class="activity-image-wrapper">
+                                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" alt="ASEAN ICT Awards">
+                                <div class="activity-badge">Penghargaan</div>
+                            </div>
+                        </div>
+                        <!-- Content -->
+                        <div class="col-lg-6">
+                            <div class="activity-content">
+                                <div class="activity-date">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"/>
+                                    </svg>
+                                    Desember 2021
+                                </div>
+                                <h3 class="activity-title">ASEAN ICT Awards 2021</h3>
+                                <p class="activity-description">
+                                    Pencapaian membanggakan! RKN meraih Silver Medal di ASEAN ICT Awards 2021 kategori Digital Content. Penghargaan ini adalah pengakuan atas dedikasi tim dalam menghasilkan konten digital berkualitas tinggi dan inovatif yang memberikan dampak positif bagi industri kreatif Indonesia di kancah regional.
+                                </p>
+                                <a href="#" class="activity-link">
+                                    Lihat Detail
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+    </section>
+    <!-- ========================================
+         ACTIVITY SECTION END
+         ======================================== -->
+
+
+    
+    <!-- <section class="team" id="team">
+        <canvas id="team-canvas" class="section-canvas"></canvas>
+        <div class="section-title">
+            <h2>Tim Kami</h2>
+            <p>Talenta kreatif di balik kesuksesan RKN</p>
+        </div>
+        
+        <div class="team-carousel-wrapper">
+            <div class="team-carousel-container">
+                <div class="team-carousel">
+                    <a href="employee-sarah-putri.html" class="team-member">
+                        <div class="team-photo">👩</div>
+                        <h3>Sarah Putri</h3>
+                        <div class="job-title">Influencer</div>
+                        <p>Mengelola strategi influencer dan membangun komunitas yang aktif.</p>
+                    </a>
+
+                    <a href="employee-budi-santoso.html" class="team-member">
+                        <div class="team-photo">👨</div>
+                        <h3>Budi Santoso</h3>
+                        <div class="job-title">Pemasaran</div>
+                        <p>Menganalisis tren pasar dan perilaku konsumen.</p>
+                    </a>
+
+                    <a href="employee-andi-wijaya.html" class="team-member">
+                        <div class="team-photo">🎨</div>
+                        <h3>Andi Wijaya</h3>
+                        <div class="job-title">Desain</div>
+                        <p>Memimpin visi kreatif dan estetika visual untuk setiap brand.</p>
+                    </a>
+
+                    <a href="employee-dian-lestari.html" class="team-member">
+                        <div class="team-photo">💼</div>
+                        <h3>Dian Lestari</h3>
+                        <div class="job-title">Brand</div>
+                        <p>Membangun dan menjaga konsistensi identitas brand.</p>
+                    </a>
+
+                    <a href="employee-rinto-harahap.html" class="team-member">
+                        <div class="team-photo">📊</div>
+                        <h3>Rinto Harahap</h3>
+                        <div class="job-title">Analisis</div>
+                        <p>Mengukur dan mengoptimalkan performa kampanye brand.</p>
+                    </a>
+
+                    <a href="employee-siti-nurhaliza.html" class="team-member">
+                        <div class="team-photo">👩‍💼</div>
+                        <h3>Siti Nurhaliza</h3>
+                        <div class="job-title">Operasional</div>
+                        <p>Mengelola operasional dan koordinasi tim.</p>
+                    </a>
+
+                    <a href="employee-bambang-irawan.html" class="team-member">
+                        <div class="team-photo">🎯</div>
+                        <h3>Bambang Irawan</h3>
+                        <div class="job-title">Strategi</div>
+                        <p>Menyusun strategi bisnis jangka panjang untuk pertumbuhan perusahaan.</p>
+                    </a>
+
+                    <a href="employee-maya-kusuma.html" class="team-member">
+                        <div class="team-photo">💡</div>
+                        <h3>Maya Kusuma</h3>
+                        <div class="job-title">Inovasi</div>
+                        <p>Menciptakan ide-ide baru dan solusi kreatif.</p>
+                    </a>
+
+                    <a href="employee-hendra-wijaya.html" class="team-member">
+                        <div class="team-photo">🤝</div>
+                        <h3>Hendra Wijaya</h3>
+                        <div class="job-title">Kemitraan</div>
+                        <p>Membangun hubungan strategis dan kolaborasi bisnis.</p>
+                    </a>
+
+                    <a href="employee-lina-setianingsih.html" class="team-member">
+                        <div class="team-photo">🌟</div>
+                        <h3>Lina Setianingsih</h3>
+                        <div class="job-title">Komunitas</div>
+                        <p>Mengelola komunitas dan keterlibatan pelanggan.</p>
+                    </a>
+
+                    <a href="employee-anton-kurniawan.html" class="team-member">
+                        <div class="team-photo">📱</div>
+                        <h3>Anton Kurniawan</h3>
+                        <div class="job-title">Digital</div>
+                        <p>Mengelola platform digital dan teknologi pemasaran.</p>
+                    </a>
+
+                    <a href="employee-wina-suryanto.html" class="team-member">
+                        <div class="team-photo">✍️</div>
+                        <h3>Wina Suryanto</h3>
+                        <div class="job-title">Konten</div>
+                        <p>Menciptakan konten berkualitas untuk seluruh platform.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <section class="contact " id="contact">
+        <canvas id="contact-canvas" class="section-canvas"></canvas>
+        <div class="contact-container">
+            <div class="contact-info fade-in-up fade-delay-2">
+                <h3>Kunjungi Kami</h3>
+                <p>Temukan lokasi kantor RKN dan hubungi kami untuk pertanyaan atau kerja sama.</p>
+                
+                <a href="https://www.google.com/maps/place/Jl.+Pesantren+No.137,+Cibabat,+Kec.+Cimahi+Utara,+Kota+Cimahi,+Jawa+Barat+40513/@-6.8769905,107.5575866,17z/data=!3m1!4b1!4m6!3m5!1s0x2e68e43aee07abe3:0xaf8b78e09bd596ce!8m2!3d-6.8769958!4d107.5601669!16s%2Fg%2F11rq8k0zfv?entry=ttu&g_ep=EgoyMDI2MDIwMS4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="address-item">
+                    <h4>📍 Cimahi</h4>
+                    <p>Jl. Pesantren No. 137<br>Cibabat, Kec. Cimahi Utara<br>Kota Cimahi, Jawa Barat 40513<br>Indonesia</p>
+                    <span class="visit-link">Lihat di Google Maps →</span>
+                </a>
+
+                <a href="https://wa.me/6285771245426?text=Halo%20RKN%2C%20saya%20ingin%20bertanya%20tentang%20layanan%20Anda." target="_blank" rel="noopener" class="address-item">
+                    <h4>📞 Telepon</h4>
+                    <p>+62 857-7124-5426</p>
+                    <span class="visit-link">Hubungi via WhatsApp →</span>
+                </a>
+
+                <a href="/cdn-cgi/l/email-protection#147d7a727b54667f7a3a7d70" class="address-item">
+                    <h4>✉️ Email</h4>
+                    <p><span class="__cf_email__" data-cfemail="fe97909891be8c9590d0979a">[email&#160;protected]</span></p>
+                    <span class="visit-link">Kirim Email →</span>
+                </a>
+            </div>
+
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3959.8!2d107.5556!3d-6.8865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e43bf0000001%3A0xabcdef1234567890!2sJl%20Pesantren%20No.%20137%2C%20Cibabat%2C%20Cimahi%20Utara%2C%20Kota%20Cimahi%2C%20Jawa%20Barat%2040513!5e0!3m2!1sid!2sid!4v1700000000000" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 RKN – Rona Karya Nusantara</p>
+        <p>Mengembangkan Brand Indonesia untuk Dunia</p>
+    </footer>
+
+    <!-- Bootstrap JS bundle (Popper included) -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        // ========================================
+        // AUTO-HIDE NAVBAR ON SCROLL
+        // ========================================
+        (function() {
+            let lastScrollTop = 0;
+            let scrollThreshold = 10; // Minimum scroll distance to trigger hide/show
+            const header = document.querySelector('header');
+            
+            window.addEventListener('scroll', function() {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // Skip if at the very top of the page
+                if (scrollTop <= 100) {
+                    header.classList.remove('header-hidden');
+                    return;
+                }
+                
+                // Check scroll direction
+                if (Math.abs(scrollTop - lastScrollTop) > scrollThreshold) {
+                    if (scrollTop > lastScrollTop) {
+                        // Scrolling down - hide header
+                        header.classList.add('header-hidden');
+                    } else {
+                        // Scrolling up - show header
+                        header.classList.remove('header-hidden');
+                    }
+                    lastScrollTop = scrollTop;
+                }
+            }, { passive: true });
+        })();
+
+        // ========================================
+        // ANIMASI MUNCUL CARD BRAND
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.brand-card');
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            // Tambahkan delay bertingkat untuk animasi berurutan
+                            const idx = Array.from(cards).indexOf(entry.target);
+                            entry.target.style.transitionDelay = (idx * 0.13) + 's';
+                            entry.target.classList.add('visible');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.2 });
+                cards.forEach(card => observer.observe(card));
+            } else {
+                // Fallback jika browser lama
+                cards.forEach((card, idx) => {
+                    card.style.transitionDelay = (idx * 0.13) + 's';
+                    card.classList.add('visible');
+                });
+            }
+        });
+
+        // ========================================
+        // ANIMASI TAMBAHAN UNTUK LOGO SOSIAL MEDIA - DIPERBAIKI
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // PERBAIKAN: Tidak perlu setTimeout tambahan
+            const socialLinks = document.querySelectorAll('.social-link');
+            
+            // Tambah event listener untuk hover effect
+            socialLinks.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.1)';
+                    this.style.boxShadow = '0 20px 40px rgba(67, 56, 202, 0.3)';
+                });
+                
+                link.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                    this.style.boxShadow = '0 8px 25px rgba(67, 56, 202, 0.15)';
+                });
+            });
+        });
+
+        // ========================================
+        // CUSTOM CURSOR SYSTEM (OPTIMIZED - Desktop Only)
+        // ========================================
+        // Only initialize cursor on desktop devices
+        if (window.innerWidth > 1024 && !('ontouchstart' in window)) {
+            const cursor = document.querySelector('.cursor');
+            const follower = document.querySelector('.cursor-follower');
+            
+            if (cursor && follower) {
+                let mouseX = 0, mouseY = 0;
+                let isHovering = false;
+                let trailCount = 0;
+                const MAX_TRAILS = 2;
+                const trailPool = [];
+
+                // Initialize trail pool
+                for (let i = 0; i < 10; i++) {
+                    const trail = document.createElement('div');
+                    trail.className = 'cursor-trail';
+                    trail.style.display = 'none';
+                    document.body.appendChild(trail);
+                    trailPool.push({ element: trail, inUse: false });
+                }
+
+                function getTrailFromPool() {
+                    let trail = trailPool.find(t => !t.inUse);
+                    if (!trail) {
+                        const newTrail = document.createElement('div');
+                        newTrail.className = 'cursor-trail';
+                        document.body.appendChild(newTrail);
+                        trail = { element: newTrail, inUse: false };
+                        trailPool.push(trail);
+                    }
+                    return trail;
+                }
+
+                let rafId = null;
+                let pendingX = 0, pendingY = 0;
+
+                function updateCursor() {
+                    cursor.style.left = pendingX + 'px';
+                    cursor.style.top = pendingY + 'px';
+                    follower.style.left = pendingX + 'px';
+                    follower.style.top = pendingY + 'px';
+
+                    if (!isHovering && Math.random() > 0.8 && trailCount < MAX_TRAILS) {
+                        const trail = getTrailFromPool();
+                        trail.inUse = true;
+                        trail.element.style.display = 'block';
+                        trail.element.style.left = pendingX + 'px';
+                        trail.element.style.top = pendingY + 'px';
+                        trail.element.style.animation = 'none';
+                        void trail.element.offsetWidth;
+                        trail.element.style.animation = 'trailFade 0.8s ease-out forwards';
+                        trailCount++;
+
+                        setTimeout(() => {
+                            trail.inUse = false;
+                            trail.element.style.display = 'none';
+                            trailCount--;
+                        }, 800);
+                    }
+
+                    rafId = null;
+                }
+
+                document.addEventListener('mousemove', (e) => {
+                    pendingX = e.clientX;
+                    pendingY = e.clientY;
+
+                    if (!rafId) {
+                        rafId = requestAnimationFrame(updateCursor);
+                    }
+                }, { passive: true });
+
+                document.addEventListener('mouseover', (e) => {
+                    if (e.target.closest('a, .brand-card, .team-member, button')) {
+                        isHovering = true;
+                        cursor.style.transform = 'translate(-50%, -50%) scale(1.8)';
+                        follower.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                    }
+                }, true);
+
+                document.addEventListener('mouseout', (e) => {
+                    if (e.target.closest('a, .brand-card, .team-member, button')) {
+                        isHovering = false;
+                        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                        follower.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }
+                }, true);
+            }
+        } else {
+            // Remove cursor elements on mobile/tablet
+            const cursorElements = document.querySelectorAll('.cursor, .cursor-follower');
+            cursorElements.forEach(el => {
+                if (el) el.remove();
+            });
+        }
+
+        // ========================================
+        // HERO 3D SCENE
+        // ========================================
+        let heroScene, heroCamera, heroRenderer, heroParticles, heroTime = 0;
+        const heroShapes = [];
+
+        function initHero3D() {
+            const canvas = document.getElementById('hero-canvas');
+            heroScene = new THREE.Scene();
+            
+            heroCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            heroCamera.position.z = 5;
+
+            heroRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            heroRenderer.setSize(window.innerWidth, window.innerHeight);
+            heroRenderer.setPixelRatio(window.devicePixelRatio);
+
+            // Colorful Particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 800;
+            const posArray = new Float32Array(particlesCount * 3);
+            const colorArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount * 3; i += 3) {
+                posArray[i] = (Math.random() - 0.5) * 15;
+                posArray[i + 1] = (Math.random() - 0.5) * 15;
+                posArray[i + 2] = (Math.random() - 0.5) * 10;
+                
+                colorArray[i] = 0.26 + Math.random() * 0.15;
+                colorArray[i + 1] = 0.22 + Math.random() * 0.15;
+                colorArray[i + 2] = 0.79 + Math.random() * 0.15;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.7,
+                blending: THREE.AdditiveBlending
+            });
+
+            heroParticles = new THREE.Points(particlesGeometry, particlesMaterial);
+            heroScene.add(heroParticles);
+
+            // Geometric Shapes
+            const geometries = [
+                new THREE.TorusGeometry(0.8, 0.3, 8, 32),
+                new THREE.OctahedronGeometry(0.6),
+                new THREE.TetrahedronGeometry(0.5)
+            ];
+
+            for(let i = 0; i < 2; i++) {
+                const geometry = geometries[i % geometries.length];
+                const material = new THREE.MeshBasicMaterial({
+                    color: 0x4338CA,
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.2
+                });
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.x = (Math.random() - 0.5) * 10;
+                mesh.position.y = (Math.random() - 0.5) * 10;
+                mesh.position.z = (Math.random() - 0.5) * 4;
+                heroShapes.push(mesh);
+                heroScene.add(mesh);
+            }
+
+            document.addEventListener('mousemove', (e) => {
+                const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+                const mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+                
+                heroCamera.position.x = mouseX * 0.5;
+                heroCamera.position.y = mouseY * 0.5;
+                heroCamera.lookAt(heroScene.position);
+            });
+
+            animateHero();
+        }
+
+        function animateHero() {
+            requestAnimationFrame(animateHero);
+            
+            heroTime += 0.003;
+
+            heroParticles.rotation.y += 0.0008;
+            heroParticles.rotation.x += 0.0004;
+
+            const positions = heroParticles.geometry.attributes.position.array;
+            for(let i = 0; i < positions.length; i += 3) {
+                positions[i + 1] = Math.sin(heroTime + positions[i]) * 0.5;
+            }
+            heroParticles.geometry.attributes.position.needsUpdate = true;
+
+            heroShapes.forEach((shape, i) => {
+                shape.rotation.x += 0.003;
+                shape.rotation.y += 0.005;
+                shape.position.y = Math.sin(heroTime + i) * 1.5;
+            });
+
+            heroRenderer.render(heroScene, heroCamera);
+        }
+
+        // ========================================
+        // BRANDS 3D SCENE
+        // ========================================
+        let brandsScene, brandsCamera, brandsRenderer, brandsTime = 0;
+        const brandsCrystals = [];
+        const brandsSections = [];
+
+        function initBrands3D() {
+            const canvas = document.getElementById('brands-canvas');
+            const section = document.querySelector('.brands');
+            brandsScene = new THREE.Scene();
+            
+            brandsCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            brandsCamera.position.z = 8;
+
+            brandsRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            brandsRenderer.setSize(window.innerWidth, section.offsetHeight);
+            brandsRenderer.setPixelRatio(window.devicePixelRatio);
+
+            for(let i = 0; i < 5; i++) {
+                const size = 0.3 + Math.random() * 0.5;
+                const geometry = new THREE.OctahedronGeometry(size, 0);
+                const material = new THREE.MeshBasicMaterial({
+                    color: new THREE.Color().setHSL(0.68, 0.85, 0.5 + Math.random() * 0.3),
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.25 + Math.random() * 0.25
+                });
+                const crystal = new THREE.Mesh(geometry, material);
+                crystal.position.x = (Math.random() - 0.5) * 18;
+                crystal.position.y = (Math.random() - 0.5) * 12;
+                crystal.position.z = (Math.random() - 0.5) * 6;
+                brandsCrystals.push(crystal);
+                brandsScene.add(crystal);
+            }
+
+            for(let s = 0; s < 1; s++) {
+                const spiralPoints = [];
+                for(let i = 0; i < 100; i++) {
+                    const angle = i * 0.35 + s * Math.PI * 0.66;
+                    const x = Math.cos(angle) * 1.5 + (s - 1) * 5;
+                    const y = i * 0.08 - 4;
+                    const z = Math.sin(angle) * 1.5;
+                    spiralPoints.push(new THREE.Vector3(x, y, z));
+                }
+                const spiralGeometry = new THREE.BufferGeometry().setFromPoints(spiralPoints);
+                const spiralMaterial = new THREE.LineBasicMaterial({
+                    color: 0x4338CA,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                const spiral = new THREE.Line(spiralGeometry, spiralMaterial);
+                brandsSections.push(spiral);
+                brandsScene.add(spiral);
+            }
+
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 400;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount * 3; i += 3) {
+                posArray[i] = (Math.random() - 0.5) * 20;
+                posArray[i + 1] = (Math.random() - 0.5) * 14;
+                posArray[i + 2] = (Math.random() - 0.5) * 8;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.04,
+                color: 0x4338CA,
+                transparent: true,
+                opacity: 0.5
+            });
+
+            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            brandsScene.add(particles);
+
+            animateBrands();
+        }
+
+        function animateBrands() {
+            requestAnimationFrame(animateBrands);
+            
+            brandsTime += 0.005;
+
+            brandsCrystals.forEach((crystal, i) => {
+                crystal.rotation.x += 0.01;
+                crystal.rotation.y += 0.015;
+                crystal.position.y += Math.sin(brandsTime + i) * 0.01;
+                crystal.position.x += Math.cos(brandsTime * 0.5 + i) * 0.004;
+            });
+
+            brandsSections.forEach((section, i) => {
+                section.rotation.y += 0.002 * (i + 1);
+            });
+
+            brandsRenderer.render(brandsScene, brandsCamera);
+        }
+
+        // ========================================
+        // TEAM 3D SCENE
+        // ========================================
+        let teamScene, teamCamera, teamRenderer, teamTime = 0;
+        const teamElements = [];
+
+        function initTeam3D() {
+            const canvas = document.getElementById('team-canvas');
+            const section = document.querySelector('.team');
+            teamScene = new THREE.Scene();
+            
+            teamCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            teamCamera.position.z = 7;
+
+            teamRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            teamRenderer.setSize(window.innerWidth, section.offsetHeight);
+            teamRenderer.setPixelRatio(window.devicePixelRatio);
+
+            for(let i = 0; i < 6; i++) {
+                const geometry = new THREE.SphereGeometry(0.15, 16, 16);
+                const material = new THREE.MeshBasicMaterial({
+                    color: 0x4338CA,
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.4
+                });
+                const sphere = new THREE.Mesh(geometry, material);
+                sphere.position.x = (Math.random() - 0.5) * 12;
+                sphere.position.y = (Math.random() - 0.5) * 8;
+                sphere.position.z = (Math.random() - 0.5) * 5;
+                teamElements.push(sphere);
+                teamScene.add(sphere);
+            }
+
+            const linePoints = [];
+            for(let i = 0; i < teamElements.length; i++) {
+                for(let j = i + 1; j < teamElements.length; j++) {
+                    if(Math.random() > 0.7) {
+                        linePoints.push(teamElements[i].position);
+                        linePoints.push(teamElements[j].position);
+                    }
+                }
+            }
+            const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePoints);
+            const lineMaterial = new THREE.LineBasicMaterial({
+                color: 0x4338CA,
+                transparent: true,
+                opacity: 0.15
+            });
+            const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+            teamScene.add(lines);
+
+            for(let i = 0; i < 2; i++) {
+                const geometry = new THREE.TorusGeometry(1 + i * 0.5, 0.05, 8, 32);
+                const material = new THREE.MeshBasicMaterial({
+                    color: 0x4338CA,
+                    transparent: true,
+                    opacity: 0.2
+                });
+                const ring = new THREE.Mesh(geometry, material);
+                ring.rotation.x = Math.PI / 4;
+                ring.position.y = (i - 1) * 2;
+                teamElements.push(ring);
+                teamScene.add(ring);
+            }
+
+            animateTeam();
+        }
+
+        function animateTeam() {
+            requestAnimationFrame(animateTeam);
+            
+            teamTime += 0.004;
+
+            teamElements.forEach((element, i) => {
+                if(element.geometry.type === 'SphereGeometry') {
+                    element.position.y += Math.sin(teamTime + i) * 0.008;
+                    element.rotation.y += 0.01;
+                } else if(element.geometry.type === 'TorusGeometry') {
+                    element.rotation.z += 0.005 * (i + 1);
+                }
+            });
+
+            teamRenderer.render(teamScene, teamCamera);
+        }
+
+        // ========================================
+        // CONTACT 3D SCENE
+        // ========================================
+        // VISION & MISSION 3D SCENE (subtle background)
+        let vmScene, vmCamera, vmRenderer, vmTime = 0;
+        const vmLines = [];
+
+        function initVisionMission3D() {
+            const canvas = document.getElementById('vision-mission-canvas');
+            const section = document.querySelector('.vision-mission');
+            if (!canvas || !section) return;
+            vmScene = new THREE.Scene();
+
+            vmCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            vmCamera.position.z = 8;
+
+            vmRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            vmRenderer.setSize(window.innerWidth, section.offsetHeight);
+            vmRenderer.setPixelRatio(window.devicePixelRatio);
+
+            for (let i = 0; i < 3; i++) {
+                const points = [];
+                for (let t = 0; t < 200; t++) {
+                    const x = (t - 100) * 0.06;
+                    const y = Math.sin(t * 0.08 + i) * 0.6 + (i - 1) * 1.2;
+                    const z = Math.cos(t * 0.06 + i) * 0.2;
+                    points.push(new THREE.Vector3(x, y, z));
+                }
+                const geo = new THREE.BufferGeometry().setFromPoints(points);
+                const mat = new THREE.LineBasicMaterial({ color: 0x4338CA, transparent: true, opacity: 0.25 });
+                const line = new THREE.Line(geo, mat);
+                vmLines.push(line);
+                vmScene.add(line);
+            }
+
+            animateVisionMission();
+        }
+
+        function animateVisionMission() {
+            requestAnimationFrame(animateVisionMission);
+            vmTime += 0.003;
+            vmLines.forEach((line, idx) => {
+                line.rotation.z = Math.sin(vmTime + idx) * 0.04;
+            });
+            if (vmRenderer && vmCamera) vmRenderer.render(vmScene, vmCamera);
+        }
+
+        // ========================================
+        // HISTORY 3D SCENE
+        // ========================================
+        let historyScene, historyCamera, historyRenderer, historyTime = 0;
+        const historyParticles = [];
+
+        function initHistory3D() {
+            const canvas = document.getElementById('history-canvas');
+            const section = document.querySelector('.history-section');
+            if (!canvas || !section) return;
+
+            historyScene = new THREE.Scene();
+            
+            historyCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            historyCamera.position.z = 8;
+
+            historyRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            historyRenderer.setSize(window.innerWidth, section.offsetHeight);
+            historyRenderer.setPixelRatio(window.devicePixelRatio);
+
+            // Create flowing particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 200;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount; i++) {
+                posArray[i * 3] = (Math.random() - 0.5) * 20;
+                posArray[i * 3 + 1] = (Math.random() - 0.5) * 20;
+                posArray[i * 3 + 2] = (Math.random() - 0.5) * 10;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                color: 0x4338CA,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            historyParticles.push(particles);
+            historyScene.add(particles);
+
+            // Create timeline visualization lines
+            for (let i = 0; i < 5; i++) {
+                const points = [];
+                for (let t = 0; t < 100; t++) {
+                    const x = (t - 50) * 0.15;
+                    const y = Math.sin(t * 0.1 + i * 2) * 0.5 + (i - 2) * 1.5;
+                    const z = Math.cos(t * 0.08 + i) * 0.3;
+                    points.push(new THREE.Vector3(x, y, z));
+                }
+                const geo = new THREE.BufferGeometry().setFromPoints(points);
+                const mat = new THREE.LineBasicMaterial({ 
+                    color: 0x5b4de8, 
+                    transparent: true, 
+                    opacity: 0.2 
+                });
+                const line = new THREE.Line(geo, mat);
+                historyScene.add(line);
+            }
+
+            animateHistory();
+        }
+
+        function animateHistory() {
+            requestAnimationFrame(animateHistory);
+            historyTime += 0.005;
+            
+            historyParticles.forEach(particle => {
+                particle.rotation.y = historyTime * 0.2;
+                particle.rotation.x = Math.sin(historyTime * 0.3) * 0.1;
+            });
+            
+            if (historyRenderer && historyCamera) {
+                historyRenderer.render(historyScene, historyCamera);
+            }
+        }
+
+        // ========================================
+        // TIMELINE SCROLL ANIMATION
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { 
+                    threshold: 0.2,
+                    rootMargin: '0px 0px -100px 0px'
+                });
+                
+                timelineItems.forEach(item => {
+                    observer.observe(item);
+                });
+            } else {
+                // Fallback for older browsers
+                timelineItems.forEach(item => {
+                    item.classList.add('visible');
+                });
+            }
+        });
+
+        let contactScene, contactCamera, contactRenderer, contactTime = 0;
+        const contactWaves = [];
+
+        function initContact3D() {
+            const canvas = document.getElementById('contact-canvas');
+            const section = document.querySelector('.contact');
+            contactScene = new THREE.Scene();
+            
+            contactCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            contactCamera.position.z = 6;
+
+            contactRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            contactRenderer.setSize(window.innerWidth, section.offsetHeight);
+            contactRenderer.setPixelRatio(window.devicePixelRatio);
+
+            for(let i = 0; i < 3; i++) {
+                const geometry = new THREE.TorusGeometry(0.8 + i * 0.3, 0.02, 8, 32);
+                const material = new THREE.MeshBasicMaterial({
+                    color: 0x4338CA,
+                    transparent: true,
+                    opacity: 0.3 - i * 0.05
+                });
+                const circle = new THREE.Mesh(geometry, material);
+                circle.rotation.x = Math.PI / 2;
+                contactWaves.push(circle);
+                contactScene.add(circle);
+            }
+
+            const pinGeometry = new THREE.ConeGeometry(0.3, 1, 8);
+            const pinMaterial = new THREE.MeshBasicMaterial({
+                color: 0x4338CA,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.5
+            });
+            const pin = new THREE.Mesh(pinGeometry, pinMaterial);
+            pin.position.y = 1;
+            contactScene.add(pin);
+
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 300;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                const radius = 3 + Math.random() * 0.5;
+                
+                posArray[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+                posArray[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+                posArray[i * 3 + 2] = radius * Math.cos(phi);
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.03,
+                color: 0x4338CA,
+                transparent: true,
+                opacity: 0.4
+            });
+
+            const globeParticles = new THREE.Points(particlesGeometry, particlesMaterial);
+            contactScene.add(globeParticles);
+
+            animateContact();
+        }
+
+        function animateContact() {
+            requestAnimationFrame(animateContact);
+            
+            contactTime += 0.005;
+
+            contactWaves.forEach((wave, i) => {
+                const scale = 1 + Math.sin(contactTime * 2 - i * 0.3) * 0.2;
+                wave.scale.set(scale, scale, scale);
+                wave.material.opacity = 0.3 - i * 0.05 + Math.sin(contactTime * 2 - i * 0.3) * 0.1;
+            });
+
+            contactRenderer.render(contactScene, contactCamera);
+        }
+
+        // ========================================
+        // TEAM CAROUSEL - SCROLL MANUAL
+        // ========================================
+        class TeamCarousel {
+            constructor() {
+                this.carousel = document.querySelector('.team-carousel');
+                this.container = document.querySelector('.team-carousel-container');
+                this.members = document.querySelectorAll('.team-member');
+                this.activeCard = null;
+
+                if (this.carousel && this.container && this.members.length > 0) {
+                    this.init();
+                    this.scrollToCenter();
+                }
+            }
+
+            init() {
+                this.members.forEach(member => {
+                    member.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.setActiveCard(member);
+                    });
+                    
+                    member.addEventListener('touchstart', (e) => {
+                        e.stopPropagation();
+                        this.setActiveCard(member);
+                    });
+                });
+            }
+
+            setActiveCard(card) {
+                this.members.forEach(member => member.classList.remove('active'));
+                card.classList.add('active');
+                this.activeCard = card;
+            }
+
+            scrollToCenter() {
+                const containerWidth = this.container.clientWidth;
+                const carouselWidth = this.carousel.scrollWidth;
+                const scrollPosition = (carouselWidth - containerWidth) / 2;
+                
+                setTimeout(() => {
+                    this.container.scrollLeft = scrollPosition;
+                }, 100);
+            }
+        }
+
+        // ========================================
+        // SMOOTH SCROLL
+        // ========================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ========================================
+        // ACTIVE NAVIGATION
+        // ========================================
+        // MOBILE NAV TOGGLE (Burger)
+        (function() {
+            const nav = document.querySelector('header nav');
+            const toggle = document.querySelector('.nav-toggle');
+            if (!nav || !toggle) return;
+
+            toggle.addEventListener('click', () => {
+                const isOpen = nav.classList.toggle('open');
+                toggle.classList.toggle('active', isOpen);
+                toggle.setAttribute('aria-expanded', String(isOpen));
+            });
+
+            // Close menu when clicking menu items
+            nav.querySelectorAll('a').forEach(a => {
+                a.addEventListener('click', () => {
+                    if (nav.classList.contains('open')) {
+                        nav.classList.remove('open');
+                        toggle.classList.remove('active');
+                        toggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+
+            // Close menu when clicking outside (backdrop)
+            nav.addEventListener('click', (e) => {
+                if (e.target === nav && nav.classList.contains('open')) {
+                    nav.classList.remove('open');
+                    toggle.classList.remove('active');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Close menu on window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768 && nav.classList.contains('open')) {
+                    nav.classList.remove('open');
+                    toggle.classList.remove('active');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        })();
+
+        // ACTIVE NAVIGATION
+        const navLinks = document.querySelectorAll('nav a');
+        const sections = document.querySelectorAll('section');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // ========================================
+        // RESIZE HANDLER
+        // ========================================
+        window.addEventListener('resize', () => {
+            const aspect = window.innerWidth / window.innerHeight;
+            
+            if (heroCamera && heroRenderer) {
+                heroCamera.aspect = aspect;
+                heroCamera.updateProjectionMatrix();
+                heroRenderer.setSize(window.innerWidth, window.innerHeight);
+            }
+            
+            if (brandsCamera && brandsRenderer) {
+                brandsCamera.aspect = aspect;
+                brandsCamera.updateProjectionMatrix();
+                brandsRenderer.setSize(window.innerWidth, document.querySelector('.brands').offsetHeight);
+            }
+
+            if (vmCamera && vmRenderer) {
+                vmCamera.aspect = aspect;
+                vmCamera.updateProjectionMatrix();
+                vmRenderer.setSize(window.innerWidth, document.querySelector('.vision-mission').offsetHeight);
+            }
+
+            if (historyCamera && historyRenderer) {
+                historyCamera.aspect = aspect;
+                historyCamera.updateProjectionMatrix();
+                historyRenderer.setSize(window.innerWidth, document.querySelector('.history-section').offsetHeight);
+            }
+
+            if (teamCamera && teamRenderer) {
+                teamCamera.aspect = aspect;
+                teamCamera.updateProjectionMatrix();
+                teamRenderer.setSize(window.innerWidth, document.querySelector('.team').offsetHeight);
+            }
+
+            if (contactCamera && contactRenderer) {
+                contactCamera.aspect = aspect;
+                contactCamera.updateProjectionMatrix();
+                contactRenderer.setSize(window.innerWidth, document.querySelector('.contact').offsetHeight);
+            }
+        });
+
+        // ========================================
+        // INITIALIZE ALL
+        // ========================================
+        window.addEventListener('load', () => {
+            initHero3D();
+            initBrands3D();
+            initTeam3D();
+            initVisionMission3D();
+            initHistory3D();
+            initContact3D();
+            new TeamCarousel();
+        });
+        // Initialize carousel with custom settings
+        const carousel = document.querySelector('#brandBanner');
+        const bsCarousel = new bootstrap.Carousel(carousel, {
+            interval: 5000,
+            wrap: true,
+            touch: true
+        });
+
+        // ========================================
+        // DYNAMIC BACKGROUND THEME CHANGER
+        // ========================================
+        function updateBackgroundTheme(slideIndex) {
+            const body = document.body;
+            // Remove all theme classes
+            body.classList.remove('theme-bocinyoi', 'theme-cikemam', 'theme-green', 'theme-default');
+            
+            // Add appropriate theme class based on slide index
+            switch(slideIndex) {
+                case 0:
+                    body.classList.add('theme-bocinyoi');
+                    break;
+                case 1:
+                    body.classList.add('theme-cikemam');
+                    break;
+                case 2:
+                    body.classList.add('theme-green');
+                    break;
+                default:
+                    body.classList.add('theme-default');
+            }
+        }
+
+        // Set initial theme on page load
+        const activeSlideOnLoad = document.querySelector('#brandBanner .carousel-item.active');
+        if (activeSlideOnLoad) {
+            const allSlides = Array.from(document.querySelectorAll('#brandBanner .carousel-item'));
+            const initialIndex = allSlides.indexOf(activeSlideOnLoad);
+            updateBackgroundTheme(initialIndex);
+        }
+
+        // Function untuk handle klik button
+        function visitBrand(brandName) {
+            alert(`Mengunjungi ${brandName}!\n\nDalam implementasi nyata, ini akan redirect ke halaman brand.`);
+            // window.location.href = '/brand/' + brandName.toLowerCase().replace(' ', '-');
+        }
+
+        // Add animation on slide change
+        carousel.addEventListener('slide.bs.carousel', function (e) {
+            // Update background theme based on slide index
+            const allSlides = Array.from(document.querySelectorAll('#brandBanner .carousel-item'));
+            const nextSlideIndex = allSlides.indexOf(e.relatedTarget);
+            updateBackgroundTheme(nextSlideIndex);
+            
+            // Reset animations
+            const activeSlide = e.relatedTarget;
+            const elements = activeSlide.querySelectorAll('.brand-tag, .brand-title, .brand-description, .btn-brand, .brand-logo-container');
+            
+            elements.forEach((el, index) => {
+                el.style.animation = 'none';
+                setTimeout(() => {
+                    el.style.animation = null;
+                }, 10);
+            });
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                bsCarousel.prev();
+            } else if (e.key === 'ArrowRight') {
+                bsCarousel.next();
+            }
+        });
+
+        // Add swipe gestures for mobile
+        let touchstartX = 0;
+        let touchendX = 0;
+
+        carousel.addEventListener('touchstart', function(e) {
+            touchstartX = e.changedTouches[0].screenX;
+        });
+
+        carousel.addEventListener('touchend', function(e) {
+            touchendX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchendX < touchstartX - 50) {
+                bsCarousel.next();
+            }
+            if (touchendX > touchstartX + 50) {
+                bsCarousel.prev();
+            }
+        }
+
+        // Auto-pause on hover
+        carousel.addEventListener('mouseenter', function() {
+            bsCarousel.pause();
+        });
+
+        carousel.addEventListener('mouseleave', function() {
+            bsCarousel.cycle();
+        });
+
+        // Console log untuk debugging
+        console.log('Brand Carousel initialized successfully! 🎉');
+        console.log('Features:');
+        console.log('- Auto-play carousel every 3.5 seconds');
+        console.log('- Keyboard navigation (Arrow Left/Right)');
+        console.log('- Touch swipe gestures');
+        console.log('- Pause on hover');
+        console.log('- Smooth animations');
+
+        document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".fade-in-up");
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
+                    observer.unobserve(entry.target); // animasi hanya sekali
+                }
+            });
+        },
+        {
+            threshold: 0.1
+        }
+    );
+
+    elements.forEach(el => observer.observe(el));
+});
+    </script>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+</body>
+</html>
