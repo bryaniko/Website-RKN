@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nangkring Seblak — RKN</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #212121;
+            color: #F5F5F5;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* --- Optimized cursor CSS --- */
+        .cursor, .cursor-follower {
+            position: fixed;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+            z-index: 9999;
+            will-change: transform, opacity;
+            transform: translate3d(50vw, 50vh, 0) translate(-50%, -50%);
+        }
+
+        .cursor {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #fcfcfc;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: 0 0 10px 2px #ffffff88;
+        }
+
+        .cursor-follower {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 18px 4px #ffffff40;
+            z-index: 9998;
+        }
+
+        body.touch-device .cursor,
+        body.touch-device .cursor-follower {
+            display: none !important;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(33, 33, 33, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(244, 67, 54, 0.2);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #F44336, #E91E63);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: rgba(245, 245, 245, 0.7);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #F44336;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #F5F5F5;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            padding: 8rem 4rem 4rem;
+            background: linear-gradient(135deg, #d32f2f 0%, #ff6f00 50%, #ffa726 100%);
+
+        }
+
+        .hero-content {
+            flex: 1;
+            z-index: 1;
+            max-width: 600px;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            line-height: 0.9;
+            margin-bottom: 2rem;
+            background-color: #fff;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideUp 1s ease-out;
+        }
+
+        .hero-content .subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            color: rgba(245, 245, 245, 0.6);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            animation: slideUp 1s ease-out 0.2s backwards;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: rgba(245, 245, 245, 0.5);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            animation: slideUp 1s ease-out 0.4s backwards;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, #F44336, #E91E63);
+            color: #F5F5F5;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 1s ease-out 0.6s backwards;
+            box-shadow: 0 4px 20px rgba(244, 67, 54, 0.3);
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
+        }
+
+        .cta-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(244, 67, 54, 0.5);
+        }
+
+        .cta-btn:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .hero-visual {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(8rem, 15vw, 15rem);
+            z-index: 1;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-visual img {
+            max-width: 420px;
+            width: 90%;
+            height: auto;
+            filter: drop-shadow(0 8px 32px #F4433640);
+            border-radius: 32px;
+            background: rgba(255,255,255,0.04);
+            padding: 1.5rem;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Banner Iklan Berjalan */
+        .ad-banner {
+            background: linear-gradient(135deg, #F44336, #E91E63);
+            padding: 1.5rem 0;
+            overflow: hidden;
+            position: relative;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ad-track {
+            display: flex;
+            animation: scroll 12s linear infinite;
+            white-space: nowrap;
+        }
+
+        .ad-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 0 4rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .ad-item .emoji {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* About Section */
+        .about {
+            padding: 8rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 3rem;
+            padding: 0.8rem 2rem;
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #F44336;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(244, 67, 54, 0.1);
+            transition: left 0.4s ease;
+        }
+
+        .back-btn:hover::before {
+            left: 0;
+        }
+
+        .back-btn:hover {
+            background: rgba(244, 67, 54, 0.2);
+            border-color: #F44336;
+            transform: translateX(-8px);
+            box-shadow: 0 4px 20px rgba(244, 67, 54, 0.2);
+        }
+
+        .back-btn:active {
+            transform: translateX(-5px) scale(0.98);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #F5F5F5, rgba(245, 245, 245, 0.5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 5rem;
+        }
+
+        .detail-item h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #F44336;
+        }
+
+        .detail-item p {
+            color: rgba(245, 245, 245, 0.6);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 8rem 4rem;
+            background: rgba(17, 17, 17, 0.5);
+        }
+
+        .products-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .product-card {
+            background: rgba(245, 245, 245, 0.03);
+            border: 1px solid rgba(244, 67, 54, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+        .product-card:nth-child(5) { animation-delay: 0.5s; }
+        .product-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .product-card:hover {
+            transform: translateY(-15px);
+            border-color: #F44336;
+            background: rgba(245, 245, 245, 0.08);
+            box-shadow: 0 25px 70px rgba(244, 67, 54, 0.3);
+        }
+
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1.3/1;
+            min-height: 200px;
+            max-height: 280px;
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(233, 30, 99, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease;
+        }
+        .product-card:hover .product-image img {
+            transform: scale(1.06);
+        }
+        .product-image .emoji-fallback {
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(245, 245, 245, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .product-card:hover .product-image::after {
+            left: 100%;
+        }
+
+        .spicy-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(244, 67, 54, 0.9);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 6px 25px rgba(244, 67, 54, 0.6);
+            }
+        }
+
+        .product-info {
+            padding: 2rem;
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-category {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(244, 67, 54, 0.15);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #F44336;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+
+        .product-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #F5F5F5;
+            margin-bottom: 0.8rem;
+        }
+
+        .product-description {
+            color: rgba(245, 245, 245, 0.55);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(244, 67, 54, 0.1);
+            margin-top: auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #F44336;
+        }
+
+        .product-price-label {
+            font-size: 0.75rem;
+            color: rgba(245, 245, 245, 0.4);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .price-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .original-price {
+            font-size: 1.1rem;
+            color: rgba(245, 245, 245, 0.3);
+            text-decoration: line-through;
+            font-weight: 500;
+        }
+
+        .discount-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.3rem 0.7rem;
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+            animation: discountPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes discountPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 4px 12px rgba(76, 175, 80, 0.6);
+            }
+        }
+
+        .buy-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .buy-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            color: #F5F5F5;
+        }
+
+        .buy-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .buy-btn.tiktok {
+            background: linear-gradient(135deg, #000000, #EE1D52, #69C9D0);
+            box-shadow: 0 4px 15px rgba(238, 29, 82, 0.3);
+        }
+
+        .buy-btn.shopee {
+            background: linear-gradient(135deg, #EE4D2D, #F05D40);
+            box-shadow: 0 4px 15px rgba(238, 77, 45, 0.3);
+        }
+
+        .buy-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .buy-btn:hover::before {
+            width: 200px;
+            height: 200px;
+        }
+
+        .buy-btn.tiktok:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(238, 29, 82, 0.5);
+        }
+
+        .buy-btn.shopee:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(238, 77, 45, 0.5);
+        }
+
+        .buy-btn:active {
+            transform: translateY(-1px) scale(1);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .feature {
+            background: rgba(245, 245, 245, 0.02);
+            border: 1px solid rgba(244, 67, 54, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(244, 67, 54, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature:hover::before {
+            opacity: 1;
+        }
+
+        .feature:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #F44336;
+            background: rgba(245, 245, 245, 0.06);
+            box-shadow: 0 20px 60px rgba(244, 67, 54, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .feature:hover .feature-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .feature h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #F5F5F5;
+        }
+
+        .feature p {
+            color: rgba(245, 245, 245, 0.5);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(244, 67, 54, 0.1);
+            color: rgba(245, 245, 245, 0.4);
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Water Ripple Effect */
+        .ripple-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ripple {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 1px solid rgb(66, 233, 0);
+            opacity: 0;
+            animation: ripple 8s linear infinite;
+        }
+
+        .ripple-1 {
+            top: 30%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .ripple-2 {
+            top: 60%;
+            left: 40%;
+            width: 240px;
+            height: 240px;
+            animation-delay: 2s;
+        }
+
+        .ripple-3 {
+            top: 35%;
+            right: 18%;
+            width: 200px;
+            height: 200px;
+            animation-delay: 4s;
+        }
+
+        .ripple-4 {
+            bottom: 20%;
+            right: 35%;
+            width: 300px;
+            height: 300px;
+            animation-delay: 6s;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0.4);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.35;
+            }
+            50% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: scale(2.2);
+                opacity: 0;
+            }
+        }
+
+        /* ========================================
+           RESPONSIVE MEDIA QUERIES
+           ======================================== */
+
+        /* Tablet Landscape & Small Desktop (1024px - 1200px) */
+        @media (max-width: 1200px) {
+            header {
+                padding: 1.5rem 3rem;
+            }
+
+            .hero {
+                padding: 7rem 3rem 3rem;
+            }
+
+            .about, .products, .features {
+                padding: 6rem 3rem;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        /* Tablet Portrait (768px - 1024px) */
+        @media (max-width: 1024px) {
+            header {
+                padding: 1.5rem 2rem;
+            }
+
+            nav ul {
+                gap: 2rem;
+            }
+
+            nav a {
+                font-size: 0.9rem;
+            }
+
+            .hero {
+                padding: 6rem 2rem 3rem;
+                gap: 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: clamp(2.5rem, 7vw, 4rem);
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .detail-item h3 {
+                font-size: 1.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+            .feature {
+                padding: 2rem;
+            }
+
+            .ad-item {
+                font-size: 1.3rem;
+                padding: 0 2.5rem;
+            }
+
+            .ad-item .emoji {
+                font-size: 2rem;
+            }
+        }
+
+        /* Mobile Landscape & Small Tablets (600px - 768px) */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+                flex-direction: row;
+            }
+
+            nav ul {
+                gap: 1.5rem;
+            }
+
+            nav a {
+                font-size: 0.85rem;
+            }
+
+            .hero {
+                flex-direction: column;
+                padding: 5rem 1.5rem 2rem;
+                text-align: center;
+                min-height: auto;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-content h1 {
+                font-size: clamp(2rem, 6vw, 3rem);
+                line-height: 1.1;
+            }
+
+            .hero-content .subtitle {
+                font-size: clamp(1rem, 2vw, 1.2rem);
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .cta-btn {
+                padding: 1rem 2.5rem;
+                font-size: 0.95rem;
+            }
+
+            .hero-visual {
+                margin-top: 2rem;
+                width: 100%;
+            }
+
+            .hero-visual img {
+                max-width: 300px;
+                padding: 1rem;
+            }
+
+            .about, .products, .features {
+                padding: 4rem 1.5rem;
+            }
+
+            .section-title {
+                font-size: clamp(1.8rem, 4vw, 2.5rem);
+                margin-bottom: 2rem;
+            }
+
+            .details-grid {
+                gap: 2rem;
+                margin-bottom: 3rem;
+            }
+
+            .detail-item h3 {
+                font-size: 1.3rem;
+            }
+
+            .detail-item p {
+                font-size: 0.95rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .product-image {
+                min-height: 180px;
+                max-height: 240px;
+            }
+
+            .product-info {
+                padding: 1.5rem;
+            }
+
+            .product-name {
+                font-size: 1.3rem;
+            }
+
+            .product-description {
+                font-size: 0.9rem;
+            }
+
+            .product-price {
+                font-size: 1.5rem;
+            }
+
+            .original-price {
+                font-size: 1rem;
+            }
+
+            .discount-badge {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.6rem;
+            }
+
+            .product-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .buy-buttons {
+                width: 100%;
+            }
+
+            .buy-btn {
+                flex: 1;
+                justify-content: center;
+                padding: 0.8rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .feature {
+                padding: 2rem 1.5rem;
+            }
+
+            .feature h4 {
+                font-size: 1.2rem;
+            }
+
+            .feature p {
+                font-size: 0.9rem;
+            }
+
+            .ad-item {
+                font-size: 1.2rem;
+                padding: 0 2rem;
+            }
+
+            .ad-item .emoji {
+                font-size: 1.8rem;
+            }
+
+            footer {
+                padding: 2rem 1.5rem;
+            }
+
+            /* Hide custom cursor on mobile */
+            body.touch-device .cursor,
+            body.touch-device .cursor-follower {
+                display: none !important;
+            }
+
+            .ripple {
+                animation-duration: 10s;
+                opacity: 0.2;
+            }
+        }
+
+        /* Mobile Portrait (480px - 600px) */
+        @media (max-width: 600px) {
+            header {
+                padding: 1rem 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            nav a {
+                font-size: 0.8rem;
+            }
+
+            .hero {
+                padding: 4.5rem 1rem 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: clamp(1.8rem, 5vw, 2.5rem);
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-content .subtitle {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-content p {
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .cta-btn {
+                padding: 0.9rem 2rem;
+                font-size: 0.9rem;
+            }
+
+            .hero-visual img {
+                max-width: 250px;
+            }
+
+            .about, .products, .features {
+                padding: 3rem 1rem;
+            }
+
+            .section-title {
+                font-size: clamp(1.5rem, 3.5vw, 2rem);
+            }
+
+            .detail-item h3 {
+                font-size: 1.2rem;
+            }
+
+            .detail-item p {
+                font-size: 0.9rem;
+            }
+
+            .product-card {
+                border-radius: 15px;
+            }
+
+            .product-image {
+                min-height: 160px;
+                max-height: 200px;
+            }
+
+            .product-info {
+                padding: 1.2rem;
+            }
+
+            .product-name {
+                font-size: 1.2rem;
+            }
+
+            .product-description {
+                font-size: 0.85rem;
+            }
+
+            .product-price {
+                font-size: 1.3rem;
+            }
+
+            .original-price {
+                font-size: 0.95rem;
+            }
+
+            .discount-badge {
+                font-size: 0.65rem;
+                padding: 0.2rem 0.5rem;
+            }
+
+            .buy-btn {
+                padding: 0.7rem 0.8rem;
+                font-size: 0.75rem;
+            }
+
+            .buy-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .feature {
+                padding: 1.5rem 1rem;
+            }
+
+            .feature-icon {
+                font-size: 2.5rem;
+            }
+
+            .feature h4 {
+                font-size: 1.1rem;
+            }
+
+            .feature p {
+                font-size: 0.85rem;
+            }
+
+            .ad-item {
+                font-size: 1rem;
+                padding: 0 1.5rem;
+            }
+
+            .ad-item .emoji {
+                font-size: 1.5rem;
+                margin-right: 0.5rem;
+            }
+
+            .back-btn {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            footer {
+                padding: 2rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Small Mobile (320px - 480px) */
+        @media (max-width: 480px) {
+            header {
+                padding: 0.8rem 0.8rem;
+            }
+
+            nav ul {
+                gap: 0.8rem;
+            }
+
+            nav a {
+                font-size: 0.75rem;
+            }
+
+            .hero {
+                padding: 4rem 0.8rem 1.5rem;
+            }
+
+            .hero-content h1 {
+                font-size: clamp(1.5rem, 4.5vw, 2rem);
+                margin-bottom: 1rem;
+            }
+
+            .hero-content .subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
+            }
+
+            .hero-content p {
+                font-size: 0.85rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .cta-btn {
+                padding: 0.8rem 1.8rem;
+                font-size: 0.85rem;
+            }
+
+            .hero-visual img {
+                max-width: 200px;
+                padding: 0.8rem;
+            }
+
+            .about, .products, .features {
+                padding: 2.5rem 0.8rem;
+            }
+
+            .section-title {
+                font-size: clamp(1.3rem, 3vw, 1.8rem);
+                margin-bottom: 1.5rem;
+            }
+
+            .detail-item h3 {
+                font-size: 1.1rem;
+            }
+
+            .detail-item p {
+                font-size: 0.85rem;
+            }
+
+            .product-info {
+                padding: 1rem;
+            }
+
+            .product-name {
+                font-size: 1.1rem;
+            }
+
+            .product-description {
+                font-size: 0.8rem;
+                margin-bottom: 1rem;
+            }
+
+            .product-price {
+                font-size: 1.2rem;
+            }
+
+            .original-price {
+                font-size: 0.85rem;
+            }
+
+            .discount-badge {
+                font-size: 0.6rem;
+                padding: 0.2rem 0.4rem;
+            }
+
+            .buy-buttons {
+                flex-direction: column;
+            }
+
+            .buy-btn {
+                width: 100%;
+                padding: 0.7rem;
+                font-size: 0.7rem;
+            }
+
+            .spicy-badge {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.7rem;
+            }
+
+            .feature {
+                padding: 1.2rem 0.8rem;
+            }
+
+            .feature-icon {
+                font-size: 2rem;
+                margin-bottom: 1rem;
+            }
+
+            .feature h4 {
+                font-size: 1rem;
+            }
+
+            .feature p {
+                font-size: 0.8rem;
+            }
+
+            .ad-item {
+                font-size: 0.9rem;
+                padding: 0 1rem;
+            }
+
+            .ad-item .emoji {
+                font-size: 1.3rem;
+            }
+
+            .back-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.85rem;
+            }
+
+            footer {
+                padding: 1.5rem 0.8rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Very Small Mobile (< 320px) */
+        @media (max-width: 320px) {
+            .hero-content h1 {
+                font-size: 1.4rem;
+            }
+
+            .hero-content .subtitle {
+                font-size: 0.8rem;
+            }
+
+            .hero-content p {
+                font-size: 0.8rem;
+            }
+
+            .cta-btn {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.8rem;
+            }
+
+            .product-name {
+                font-size: 1rem;
+            }
+
+            .product-price {
+                font-size: 1.1rem;
+            }
+
+            .buy-btn {
+                font-size: 0.65rem;
+            }
+        }
+
+        /* Landscape Orientation Adjustments */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .hero {
+                min-height: auto;
+                padding: 5rem 2rem 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+                margin-bottom: 1rem;
+            }
+
+            .hero-content .subtitle {
+                margin-bottom: 1rem;
+            }
+
+            .hero-content p {
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-visual img {
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom cursor elements -->
+    <div class="cursor" aria-hidden="true"></div>
+    <div class="cursor-follower" aria-hidden="true"></div>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">BERANDA</a></li>
+                <li><a href="#products">PRODUK</a></li>
+                <li><a href="#about">TENTANG</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Nangkring Seblak</h1>
+            <div class="subtitle">Cemilan Pedas Nusantara</div>
+            <p>Cemilan seblak pedas dengan cita rasa autentik yang bikin ketagihan. Dibuat dari bahan berkualitas dengan bumbu rahasia yang menggoyang lidah!</p>
+            <a href="#products" class="cta-btn">LIHAT PRODUK</a>
+        </div>
+        <div class="hero-visual">
+            <img src="img/brand/logo-nagkringseblak.jpeg" alt="Logo Nangkring Seblak" loading="lazy">
+        </div>
+    </section>
+
+    <!-- Banner Iklan Berjalan -->
+    <div class="ad-banner">
+        <div class="ad-track">
+            <div class="ad-item"><span class="emoji">🔥</span> PROMO SPESIAL! DISKON 20%</div>
+            <div class="ad-item"><span class="emoji">🌶️</span> GRATIS ONGKIR MIN. 100K</div>
+            <div class="ad-item"><span class="emoji">⚡</span> PEDASNYA NAGIH!</div>
+            <div class="ad-item"><span class="emoji">🎉</span> BELI 3 GRATIS 1</div>
+            <div class="ad-item"><span class="emoji">💯</span> DIJAMIN HALAL & HIGIENIS</div>
+            <div class="ad-item"><span class="emoji">🔥</span> PROMO SPESIAL! DISKON 20%</div>
+            <div class="ad-item"><span class="emoji">🌶️</span> GRATIS ONGKIR MIN. 100K</div>
+            <div class="ad-item"><span class="emoji">⚡</span> PEDASNYA NAGIH!</div>
+            <div class="ad-item"><span class="emoji">🎉</span> BELI 3 GRATIS 1</div>
+            <div class="ad-item"><span class="emoji">💯</span> DIJAMIN HALAL & HIGIENIS</div>
+        </div>
+    </div>
+
+    <section class="products" id="products">
+        <div class="products-container">
+            <h2 class="section-title">Produk Kami</h2>
+            <p style="color: rgba(245, 245, 245, 0.5); font-size: 1rem; margin-top: -2rem; margin-bottom: 2rem;">Pilihan cemilan pedas terbaik untuk menemani hari-hari Anda</p>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/produk-produk/nangkring-sebelak/produk-2.jpg" alt="Seblak Pedas Original" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='block');">
+                        <span class="emoji-fallback" style="display:none;">🌶️</span>
+                        <div class="spicy-badge">🔥 Level 5</div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Seblak Kering</span>
+                        <h3 class="product-name">Nangkring Seblak - Kuah Jadul Pedas Gurih Authentik Seblak Instan Viral Original Asli Bandung</h3>
+                        <p class="product-description">Seblak kering dengan bumbu pedas original yang gurih dan bikin nagih. Pas buat ngemil santai!</p>
+                        <div class="product-footer">
+                            <div class="price-wrapper">
+                                <span class="product-price-label">Harga</span>
+                                <div class="price-container">
+                                    <div class="product-price">Rp 24.000</div>
+                                    <span class="original-price">Rp 40.000</span>
+                                    <span class="discount-badge">-20%</span>
+                                </div>
+                            </div>
+                            <div class="buy-buttons">
+                                <a href="https://www.tiktok.com/@nangkringseblak" target="_blank" class="buy-btn tiktok">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                    </svg>
+                                    TikTok
+                                </a>
+                                <a href="https://shopee.co.id/Nangkring-Seblak-Instan-Pedas-Gurih-Kuah-Authentic-Original-Kuah-Nangkring-Viral-Asli-Bandung-i.934728110.24817206894?extraParams=%7B%22display_model_id%22%3A226102532074%7D" target="_blank" class="buy-btn shopee">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.5 8.5c0-2.5-2-4.5-4.5-4.5S9.5 6 9.5 8.5c0 1.3.6 2.5 1.5 3.3v2.7L9.5 16l-2 2.5c-.3.4-.3 1 0 1.4.3.4.8.4 1.2.1l2.8-2.2 2.8 2.2c.2.1.4.2.6.2.3 0 .6-.1.7-.3.3-.4.3-1 0-1.4L13.5 16l-1.5-1.5v-2.7c.9-.8 1.5-2 1.5-3.3zm-4.5 2c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                                    </svg>
+                                    Shopee
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/produk-produk/nangkring-sebelak/produk-3.jpg" alt="Seblak Mampus Extreme" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='block');">
+                        <span class="emoji-fallback" style="display:none;">🔥</span>
+                        <div class="spicy-badge">🔥🔥 Level 10</div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Seblak Kering</span>
+                        <h3 class="product-name">Seblak Mampus Extreme</h3>
+                        <p class="product-description">Buat yang suka tantangan! Seblak extra pedas dengan level kepedasan maksimal. Berani coba?</p>
+                        <div class="product-footer">
+                            <div class="price-wrapper">
+                                <span class="product-price-label">Harga</span>
+                                <div class="price-container">
+                                    <div class="product-price">Rp 9.900</div>
+                                    <span class="original-price">Rp 20.000</span>
+                                    <span class="discount-badge">-20%</span>
+                                </div>
+                            </div>
+                            <div class="buy-buttons">
+                                <a href="https://www.tiktok.com/@nangkringseblak" target="_blank" class="buy-btn tiktok">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                    </svg>
+                                    TikTok
+                                </a>
+                                <a href="https://shopee.co.id" target="_blank" class="buy-btn shopee">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.5 8.5c0-2.5-2-4.5-4.5-4.5S9.5 6 9.5 8.5c0 1.3.6 2.5 1.5 3.3v2.7L9.5 16l-2 2.5c-.3.4-.3 1 0 1.4.3.4.8.4 1.2.1l2.8-2.2 2.8 2.2c.2.1.4.2.6.2.3 0 .6-.1.7-.3.3-.4.3-1 0-1.4L13.5 16l-1.5-1.5v-2.7c.9-.8 1.5-2 1.5-3.3zm-4.5 2c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                                    </svg>
+                                    Shopee
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/produk-produk/nangkring-sebelak/produk-4.jpg" alt="Seblak Keju Creamy" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='block');">
+                        <span class="emoji-fallback" style="display:none;">🧀</span>
+                        <div class="spicy-badge">🔥 Level 3</div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Seblak Kering</span>
+                        <h3 class="product-name">Seblak Keju Creamy</h3>
+                        <p class="product-description">Perpaduan sempurna antara pedas dan gurih keju. Rasa creamy yang melimpah di setiap gigitan!</p>
+                        <div class="product-footer">
+                            <div class="price-wrapper">
+                                <span class="product-price-label">Harga</span>
+                                <div class="price-container">
+                                    <div class="product-price">Rp 72.000</div>
+                                    <span class="original-price">Rp 120.000</span>
+                                    <span class="discount-badge">-20%</span>
+                                </div>
+                            </div>
+                            <div class="buy-buttons">
+                                <a href="https://www.tiktok.com/@nangkringseblak" target="_blank" class="buy-btn tiktok">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                    </svg>
+                                    TikTok
+                                </a>
+                                <a href="https://shopee.co.id" target="_blank" class="buy-btn shopee">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.5 8.5c0-2.5-2-4.5-4.5-4.5S9.5 6 9.5 8.5c0 1.3.6 2.5 1.5 3.3v2.7L9.5 16l-2 2.5c-.3.4-.3 1 0 1.4.3.4.8.4 1.2.1l2.8-2.2 2.8 2.2c.2.1.4.2.6.2.3 0 .6-.1.7-.3.3-.4.3-1 0-1.4L13.5 16l-1.5-1.5v-2.7c.9-.8 1.5-2 1.5-3.3zm-4.5 2c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                                    </svg>
+                                    Shopee
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/produk-produk/nangkring-sebelak/produk-7.jpg" alt="Seblak Seafood Mix" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='block');">
+                        <span class="emoji-fallback" style="display:none;">🦐</span>
+                        <div class="spicy-badge">🔥 Level 4</div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Seblak Basah</span>
+                        <h3 class="product-name">Seblak Seafood Mix</h3>
+                        <p class="product-description">Seblak basah dengan campuran seafood segar. Kuah pedas yang bikin ketagihan!</p>
+                        <div class="product-footer">
+                            <div class="price-wrapper">
+                                <span class="product-price-label">Harga</span>
+                                <div class="price-container">
+                                    <div class="product-price">Rp 17.000</div>
+                                    <span class="original-price">Rp 35.000</span>
+                                    <span class="discount-badge">-15%</span>
+                                </div>
+                            </div>
+                            <div class="buy-buttons">
+                                <a href="https://www.tiktok.com/@nangkringseblak" target="_blank" class="buy-btn tiktok">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                    </svg>
+                                    TikTok
+                                </a>
+                                <a href="https://shopee.co.id" target="_blank" class="buy-btn shopee">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.5 8.5c0-2.5-2-4.5-4.5-4.5S9.5 6 9.5 8.5c0 1.3.6 2.5 1.5 3.3v2.7L9.5 16l-2 2.5c-.3.4-.3 1 0 1.4.3.4.8.4 1.2.1l2.8-2.2 2.8 2.2c.2.1.4.2.6.2.3 0 .6-.1.7-.3.3-.4.3-1 0-1.4L13.5 16l-1.5-1.5v-2.7c.9-.8 1.5-2 1.5-3.3zm-4.5 2c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                                    </svg>
+                                    Shopee
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/produk-produk/nangkring-sebelak/produk-5.jpg" alt="Seblak Seafood Mix" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='block');">
+                        <span class="emoji-fallback" style="display:none;">🦐</span>
+                        <div class="spicy-badge">🔥 Level 4</div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Seblak Basah</span>
+                        <h3 class="product-name">Seblak Seafood Mix</h3>
+                        <p class="product-description">Seblak basah dengan campuran seafood segar. Kuah pedas yang bikin ketagihan!</p>
+                        <div class="product-footer">
+                            <div class="price-wrapper">
+                                <span class="product-price-label">Harga</span>
+                                <div class="price-container">
+                                    <div class="product-price">Rp 9.900</div>
+                                    <span class="original-price">Rp 10.000</span>
+                                    <span class="discount-badge">-15%</span>
+                                </div>
+                            </div>
+                            <div class="buy-buttons">
+                                <a href="https://www.tiktok.com/@nangkringseblak" target="_blank" class="buy-btn tiktok">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                    </svg>
+                                    TikTok
+                                </a>
+                                <a href="https://shopee.co.id" target="_blank" class="buy-btn shopee">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.5 8.5c0-2.5-2-4.5-4.5-4.5S9.5 6 9.5 8.5c0 1.3.6 2.5 1.5 3.3v2.7L9.5 16l-2 2.5c-.3.4-.3 1 0 1.4.3.4.8.4 1.2.1l2.8-2.2 2.8 2.2c.2.1.4.2.6.2.3 0 .6-.1.7-.3.3-.4.3-1 0-1.4L13.5 16l-1.5-1.5v-2.7c.9-.8 1.5-2 1.5-3.3zm-4.5 2c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                                    </svg>
+                                    Shopee
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/produk-produk/nangkring-sebelak/produk-1.jpg" alt="Seblak Seafood Mix" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='block');">
+                        <span class="emoji-fallback" style="display:none;">🦐</span>
+                        <div class="spicy-badge">🔥 Level 4</div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Seblak Basah</span>
+                        <h3 class="product-name">Seblak Seafood Mix</h3>
+                        <p class="product-description">Seblak basah dengan campuran seafood segar. Kuah pedas yang bikin ketagihan!</p>
+                        <div class="product-footer">
+                            <div class="price-wrapper">
+                                <span class="product-price-label">Harga</span>
+                                <div class="price-container">
+                                    <div class="product-price">Rp 21.250</div>
+                                    <span class="original-price">Rp 25.000</span>
+                                    <span class="discount-badge">-15%</span>
+                                </div>
+                            </div>
+                            <div class="buy-buttons">
+                                <a href="https://www.tiktok.com/@nangkringseblak" target="_blank" class="buy-btn tiktok">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                    </svg>
+                                    TikTok
+                                </a>
+                                <a href="https://shopee.co.id" target="_blank" class="buy-btn shopee">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.5 8.5c0-2.5-2-4.5-4.5-4.5S9.5 6 9.5 8.5c0 1.3.6 2.5 1.5 3.3v2.7L9.5 16l-2 2.5c-.3.4-.3 1 0 1.4.3.4.8.4 1.2.1l2.8-2.2 2.8 2.2c.2.1.4.2.6.2.3 0 .6-.1.7-.3.3-.4.3-1 0-1.4L13.5 16l-1.5-1.5v-2.7c.9-.8 1.5-2 1.5-3.3zm-4.5 2c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                                    </svg>
+                                    Shopee
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/produk-produk/nangkring-sebelak/produk-6.jpg" alt="Seblak Seafood Mix" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='block');">
+                        <span class="emoji-fallback" style="display:none;">🦐</span>
+                        <div class="spicy-badge">🔥 Level 4</div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Seblak Basah</span>
+                        <h3 class="product-name">Seblak Seafood Mix</h3>
+                        <p class="product-description">Seblak basah dengan campuran seafood segar. Kuah pedas yang bikin ketagihan!</p>
+                        <div class="product-footer">
+                            <div class="price-wrapper">
+                                <span class="product-price-label">Harga</span>
+                                <div class="price-container">
+                                    <div class="product-price">Rp 21.250</div>
+                                    <span class="original-price">Rp 25.000</span>
+                                    <span class="discount-badge">-15%</span>
+                                </div>
+                            </div>
+                            <div class="buy-buttons">
+                                <a href="https://www.tiktok.com/@nangkringseblak" target="_blank" class="buy-btn tiktok">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                    </svg>
+                                    TikTok
+                                </a>
+                                <a href="https://shopee.co.id" target="_blank" class="buy-btn shopee">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.5 8.5c0-2.5-2-4.5-4.5-4.5S9.5 6 9.5 8.5c0 1.3.6 2.5 1.5 3.3v2.7L9.5 16l-2 2.5c-.3.4-.3 1 0 1.4.3.4.8.4 1.2.1l2.8-2.2 2.8 2.2c.2.1.4.2.6.2.3 0 .6-.1.7-.3.3-.4.3-1 0-1.4L13.5 16l-1.5-1.5v-2.7c.9-.8 1.5-2 1.5-3.3zm-4.5 2c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                                    </svg>
+                                    Shopee
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/produk-produk/nangkring-sebelak/produk-8.jpg" alt="Seblak Komplit Jumbo" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='block');">
+                        <span class="emoji-fallback" style="display:none;">🍜</span>
+                        <div class="spicy-badge">🔥 Level 6</div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">Seblak Basah</span>
+                        <h3 class="product-name">Seblak Komplit Jumbo</h3>
+                        <p class="product-description">Seblak jumbo dengan isian lengkap: bakso, sosis, telur, dan sayuran. Bikin kenyang maksimal!</p>
+                        <div class="product-footer">
+                            <div class="price-wrapper">
+                                <span class="product-price-label">Harga</span>
+                                <div class="price-container">
+                                    <div class="product-price">Rp 24.900</div>
+                                    <span class="original-price">Rp 40.000</span>
+                                    <span class="discount-badge">-15%</span>
+                                </div>
+                            </div>
+                            <div class="buy-buttons">
+                                <a href="https://www.tiktok.com/@nangkringseblak" target="_blank" class="buy-btn tiktok">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                    </svg>
+                                    TikTok
+                                </a>
+                                <a href="https://shopee.co.id" target="_blank" class="buy-btn shopee">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.5 8.5c0-2.5-2-4.5-4.5-4.5S9.5 6 9.5 8.5c0 1.3.6 2.5 1.5 3.3v2.7L9.5 16l-2 2.5c-.3.4-.3 1 0 1.4.3.4.8.4 1.2.1l2.8-2.2 2.8 2.2c.2.1.4.2.6.2.3 0 .6-.1.7-.3.3-.4.3-1 0-1.4L13.5 16l-1.5-1.5v-2.7c.9-.8 1.5-2 1.5-3.3zm-4.5 2c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                                    </svg>
+                                    Shopee
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <a href="#" class="back-btn">← Kembali ke Brand</a>
+        
+        <h2 class="section-title">Tentang Nangkring Seblak</h2>
+        
+        <div class="details-grid">
+            <div class="detail-item">
+                <h3>Resep Rahasia Turun Temurun</h3>
+                <p>Menggunakan resep rahasia yang telah diwariskan turun temurun dengan bumbu-bumbu pilihan yang membuat cita rasa seblak kami berbeda dan istimewa.</p>
+            </div>
+            <div class="detail-item">
+                <h3>Bahan Berkualitas Premium</h3>
+                <p>Hanya menggunakan bahan-bahan segar dan berkualitas tinggi. Semua produk dijamin halal dan diproduksi dengan standar kebersihan yang ketat.</p>
+            </div>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <h3>Level Pedas Sesuai Selera</h3>
+                <p>Tersedia berbagai level kepedasan mulai dari mild hingga extreme. Anda yang menentukan seberapa pedas yang Anda inginkan!</p>
+            </div>
+            <div class="detail-item">
+                <h3>Higienis & Terpercaya</h3>
+                <p>Diproduksi di dapur bersertifikat dengan proses yang higienis. Kepuasan dan kesehatan pelanggan adalah prioritas kami.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2 class="section-title">Keunggulan Produk</h2>
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">🌶️</div>
+                <h4>Bumbu Meresap Sempurna</h4>
+                <p>Setiap kerupuk seblak dibumbui dengan sempurna sehingga rasanya meresap hingga ke dalam. Nikmati sensasi pedasnya yang tiada tara!</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🔥</div>
+                <h4>Level Pedas Beragam</h4>
+                <p>Kami menyediakan berbagai level kepedasan, mulai dari yang ringan hingga yang super pedas. Sesuaikan dengan selera dan keberanianmu!</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🍜</div>
+                <h4>Komplit dengan Pelengkap</h4>
+                <p>Setiap pembelian seblak sudah termasuk pelengkap seperti bakso, sosis, dan telur. Semua dalam satu paket kenyang!</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🥤</div>
+                <h4>Minuman Segar</h4>
+                <p>Lengkapi santapan seblakmu dengan minuman segar pilihan. Cocok untuk mengurangi kepedasan dan menyegarkan tenggorokan.</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">💯</div>
+                <h4>Jaminan Halal dan Higienis</h4>
+                <p>Semua produk kami dijamin halal dan diproduksi dengan standar kebersihan yang tinggi. Aman dan nyaman untuk dikonsumsi.</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🚚</div>
+                <h4>Pengiriman Cepat & Aman</h4>
+                <p>Pesan sekarang dan nikmati seblak pedas kami dengan pengiriman cepat dan aman. Sampai di tangan Anda dalam kondisi terbaik!</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Nangkring Seblak — RKN</p>
+    </footer>
+
+    <script>
+    (function() {
+        if ('scrollBehavior' in document.documentElement.style) return;
+        document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                var targetId = this.getAttribute('href').slice(1);
+                var target = document.getElementById(targetId);
+                if (target) {
+                    e.preventDefault();
+                    var top = target.getBoundingClientRect().top + window.pageYOffset;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
+                }
+            });
+        });
+    })();
+    </script>
+
+    <script>
+    (function () {
+      const cursor = document.querySelector('.cursor');
+      const follower = document.querySelector('.cursor-follower');
+      if (!cursor || !follower) return;
+
+      const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+      if (isTouch) {
+        document.body.classList.add('touch-device');
+        cursor.style.display = 'none';
+        follower.style.display = 'none';
+        document.body.style.cursor = '';
+        return;
+      }
+
+      let targetX = window.innerWidth / 2;
+      let targetY = window.innerHeight / 2;
+
+      let cx = targetX, cy = targetY;
+      let fx = targetX, fy = targetY;
+
+      const CURSOR_EASE = 0.22;
+      const FOLLOWER_EASE = 0.10;
+
+      let isHover = false;
+
+      const cStyle = cursor.style;
+      const fStyle = follower.style;
+
+      const initX = Math.round(window.innerWidth / 2);
+      const initY = Math.round(window.innerHeight / 2);
+      targetX = cx = fx = initX;
+      targetY = cy = fy = initY;
+      cStyle.transform = `translate3d(${initX}px, ${initY}px, 0) translate(-50%, -50%) scale(1)`;
+      fStyle.transform = `translate3d(${initX}px, ${initY}px, 0) translate(-50%, -50%) scale(1)`;
+
+      document.addEventListener('pointermove', (e) => {
+        if (typeof e.clientX === 'number' && typeof e.clientY === 'number') {
+          targetX = e.clientX;
+          targetY = e.clientY;
+        }
+        if (cStyle.opacity === '0') {
+          cStyle.opacity = '1';
+          fStyle.opacity = '1';
+        }
+      }, { passive: true });
+
+      function isInteractive(el) {
+        return el && el.closest && el.closest('a, button, .buy-btn, .cta-btn');
+      }
+      document.addEventListener('pointerover', (e) => {
+        if (isInteractive(e.target)) isHover = true;
+      }, true);
+      document.addEventListener('pointerout', (e) => {
+        const rel = e.relatedTarget;
+        if (!isInteractive(rel)) isHover = false;
+      }, true);
+
+      document.addEventListener('keydown', (ev) => {
+        const keys = ['Tab', 'Shift', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+        if (keys.includes(ev.key)) {
+          cStyle.opacity = '0';
+          fStyle.opacity = '0';
+        }
+      });
+
+      document.addEventListener('pointerdown', () => {
+        cStyle.opacity = '1';
+        fStyle.opacity = '1';
+      });
+
+      window.addEventListener('resize', () => {
+        const cxr = Math.round(window.innerWidth / 2);
+        const cyr = Math.round(window.innerHeight / 2);
+        targetX = cx = fx = cxr;
+        targetY = cy = fy = cyr;
+      });
+
+      function loop() {
+        cx += (targetX - cx) * CURSOR_EASE;
+        cy += (targetY - cy) * CURSOR_EASE;
+
+        fx += (cx - fx) * FOLLOWER_EASE;
+        fy += (cy - fy) * FOLLOWER_EASE;
+
+        const cScale = isHover ? 1.7 : 1;
+        const fScale = isHover ? 1.25 : 1;
+
+        cStyle.transform = `translate3d(${Math.round(cx)}px, ${Math.round(cy)}px, 0) translate(-50%, -50%) scale(${cScale})`;
+        fStyle.transform = `translate3d(${Math.round(fx)}px, ${Math.round(fy)}px, 0) translate(-50%, -50%) scale(${fScale})`;
+
+        requestAnimationFrame(loop);
+      }
+
+      requestAnimationFrame(loop);
+    })();
+    </script>
+</body>
+</html>
