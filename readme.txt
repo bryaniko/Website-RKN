@@ -17,8 +17,8 @@
 ### 👨‍💻 Developper
 **Made By Bryan Iko Rismaputra**
 
-<!-- Ikon Media Sosial (Opsional: Ganti link # dengan link profilmu) -->
-[![LinkedIn](https://img.shields.io)](https://linkedin.com)
+<!-- Ikon Media Sosial -->
+[![LinkedIn](https://img.shields.io/badge/any_text-you_like-blue)](https://linkedin.com)
 [![Instagram](https://img.shields.io)](https://instagram.com)
 
 ---
