@@ -2,7 +2,7 @@
 
 Project Website Company profile
 
-🚀 **[Lihat Website Langsung!](https://bryaniko.github.io/Website-RKN)**
+[![LIVE](https://img.shields.io)](https://bryaniko.github.io/Website-RKN)
 
 ---
 ### Developper
