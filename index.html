@@ -79,7 +79,7 @@ nav a:hover::after,nav a.active::after{width:100%;}
     background:rgba(0,0,0,.6);opacity:0;visibility:hidden;
     transition:opacity .3s,visibility .3s;z-index:998;pointer-events:none;
   }
-  header nav.open::before{opacity:1;scrollbar-width: none; pointer-events:auto;}
+  header nav.open::before{opacity:1;visibility:visible;pointer-events:auto;}
   header nav{
     position:fixed;top:0;right:0;width:300px;max-width:85vw;height:100vh;
     background:linear-gradient(180deg,rgba(30,30,45,.98),rgba(20,20,35,.98));
@@ -657,7 +657,7 @@ nav a:hover::after,nav a.active::after{width:100%;}
 .activities::before{
   content:"";position:absolute;inset:0;
   background-image:
-    radial-gradient(circle at 10% 20%,rgba(99, 241, 123, 0.25) 2px,transparent 2.5px),
+    radial-gradient(circle at 10% 20%,rgba(99,102,241,.25) 2px,transparent 2.5px),
     radial-gradient(circle at 25% 35%,rgba(99,102,241,.18) 2px,transparent 2.5px),
     radial-gradient(circle at 40% 60%,rgba(34,197,94,.22) 2px,transparent 2.5px),
     radial-gradient(circle at 80% 30%,rgba(34,197,94,.18) 2px,transparent 2.5px),
@@ -905,101 +905,9 @@ footer{
   border-top:1px solid rgba(67,56,202,.1);color:rgba(245,245,245,.4);
 }
 footer p{margin-bottom:.5rem;}
-
-/* hide scrollbar but still scrollable */
-html, body {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE/Edge */
-}
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-
-/* loading screen overlay */
-.loading-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.95);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  z-index: 2000;
-  transition: opacity .5s ease, visibility .5s;
-  opacity: 1;
-  visibility: visible;
-}
-.loading-screen.hide {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.loading-spinner {
-  width: 60px;
-  height: 60px;
-  border: 6px solid rgba(255, 255, 255, 0.2);
-  border-top: 6px solid var(--gold);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loading-text {
-  margin-top: 20px;
-  font-size: 14px;
-  color: var(--gold);
-}
-
-/* back to top button */
-#back-to-top {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 44px;
-  height: 44px;
-  background: var(--blue);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  /* always take space but start hidden */
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1000;
-  transition: opacity .3s, visibility .3s, transform .3s;
-  transform: translateY(100%);
-}
-#back-to-top.show {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-
 </style>
 </head>
 <body>
-
-<!-- Loading overlay -->
-<div class="loading-screen" id="loadingScreen">
-  <div class="loading-spinner"></div>
-  <div class="loading-text">Memuat...</div>
-</div>
-
 
 
 <!-- ═══════════════ HEADER ═══════════════ -->
@@ -1235,7 +1143,6 @@ body::-webkit-scrollbar {
     </div>
   </section>
 
-  
   <!-- ══════════════ ACTIVITIES ══════════════ -->
   <section class="activities" id="activities">
     <div class="activity-banner-photos">
@@ -1243,11 +1150,16 @@ body::-webkit-scrollbar {
       <img src="img/banner/TempatProduksi.JPG" alt="Kolaborasi Tim" class="activity-banner-photo">
       <img src="img/banner/StudioKonten.JPG" alt="Aktivitas Kantor" class="activity-banner-photo">
     </div>
-            <div class="activity-counter-section">
+    <div class="activity-content-section">
+      <div class="container">
+        <div class="text-center text-lg-start fade-in-up fade-delay-1">
+          <div class="activity-main-tag"><h2>KEGIATAN</h2></div>
+        </div>
+        <div class="activity-counter-section">
           <div class="counter-item">
-            <span class="counter-number" data-target="98%">0</span>
-            <span class="counter-label">Tingkat Kepuasan</span>
-            <p class="counter-desc">Menegaskan standar kualitas Anda</p>
+            <span class="counter-number" data-target="50+">0</span>
+            <span class="counter-label">Tim Anggota</span>
+            <p class="counter-desc">Profesional berdedikasi dalam ekspansi brand</p>
           </div>
           <div class="counter-item">
             <span class="counter-number" data-target="5">0</span>
@@ -1255,7 +1167,7 @@ body::-webkit-scrollbar {
             <p class="counter-desc">Portofolio berkualitas tinggi di pasar</p>
           </div>
           <div class="counter-item">
-            <span class="counter-number" data-target="50">0</span>
+            <span class="counter-number" data-target="50+">0</span>
             <span class="counter-label">Produk</span>
             <p class="counter-desc">Inovasi berkelanjutan untuk konsumen</p>
           </div>
@@ -1264,12 +1176,6 @@ body::-webkit-scrollbar {
             <span class="counter-label">Provinsi</span>
             <p class="counter-desc">Jangkauan distribusi di seluruh Indonesia</p>
           </div>
-        </div>
-
-    <div class="activity-content-section">
-      <div class="container">
-        <div class="text-center text-lg-start fade-in-up fade-delay-1">
-          <div class="activity-main-tag"><h2>KEGIATAN</h2></div>
         </div>
         <!-- Activity 1 -->
         <div class="activity-item fade-in-up fade-delay-2">
@@ -1520,52 +1426,52 @@ window.addEventListener('load',()=>{
   });
 });
 
-// /* ══════════════════════════════════════════
-//    TYPEWRITER ENGINE
-// ══════════════════════════════════════════ */
-// const TW_LINES=[
-//   {text:"Menciptakan brand-brand unggul yang bermanfaat dan menginspirasi.",source:"Visi Perusahaan",dot:"#d4a843"},
-//   {text:"Setiap langkah adalah ibadah, dengan nilai spiritualitas dalam setiap karya.",source:"Misi ke-5",dot:"#a78bfa"},
-//   {text:"Berjiman — meyakini rukun iman dan berorientasi pada kehidupan akhirat.",source:"Nilai: Pondasi BER",dot:"#f0c96e"},
-//   {text:"Berintegritas — menjaga keselarasan pikiran, perkataan, dan perbuatan.",source:"Nilai: Pondasi BER",dot:"#f0c96e"},
-//   {text:"Menebar kebaikan ke dunia internasional, membawa harum nama Nusantara.",source:"Misi ke-4",dot:"#6ee7b7"},
-//   {text:"Berinovasi — terus belajar, berkreasi, dan mengembangkan karya baru.",source:"Nilai: Penguat BER",dot:"#93c5fd"},
-//   {text:"Mengharumkan Nusantara hingga kancah internasional, demi ridho Allah SWT.",source:"Visi Perusahaan",dot:"#d4a843"},
-// ];
-// const twDisplay=document.getElementById('tw-display');
-// const twSource=document.getElementById('tw-source');
-// const twDot=document.getElementById('tw-dot');
-// const twPips=document.getElementById('tw-pips');
+/* ══════════════════════════════════════════
+   TYPEWRITER ENGINE
+══════════════════════════════════════════ */
+const TW_LINES=[
+  {text:"Menciptakan brand-brand unggul yang bermanfaat dan menginspirasi.",source:"Visi Perusahaan",dot:"#d4a843"},
+  {text:"Setiap langkah adalah ibadah, dengan nilai spiritualitas dalam setiap karya.",source:"Misi ke-5",dot:"#a78bfa"},
+  {text:"Berjiman — meyakini rukun iman dan berorientasi pada kehidupan akhirat.",source:"Nilai: Pondasi BER",dot:"#f0c96e"},
+  {text:"Berintegritas — menjaga keselarasan pikiran, perkataan, dan perbuatan.",source:"Nilai: Pondasi BER",dot:"#f0c96e"},
+  {text:"Menebar kebaikan ke dunia internasional, membawa harum nama Nusantara.",source:"Misi ke-4",dot:"#6ee7b7"},
+  {text:"Berinovasi — terus belajar, berkreasi, dan mengembangkan karya baru.",source:"Nilai: Penguat BER",dot:"#93c5fd"},
+  {text:"Mengharumkan Nusantara hingga kancah internasional, demi ridho Allah SWT.",source:"Visi Perusahaan",dot:"#d4a843"},
+];
+const twDisplay=document.getElementById('tw-display');
+const twSource=document.getElementById('tw-source');
+const twDot=document.getElementById('tw-dot');
+const twPips=document.getElementById('tw-pips');
 
-// // guard: only run engine if all required elements exist
-// if(twDisplay && twSource && twDot && twPips){
-// TW_LINES.forEach((_,i)=>{
-//   const p=document.createElement('div');
-//   p.className='tw-pip'+(i===0?' active':'');twPips.appendChild(p);
-// });
-// let twIdx=0,twCi=0,twDel=false,twPaused=false;
-// function twUpdatePips(i){twPips.querySelectorAll('.tw-pip').forEach((p,j)=>p.classList.toggle('active',j===i));}
-// function twTick(){
-//   if(twPaused){setTimeout(twTick,1400);twPaused=false;return;}
-//   const ln=TW_LINES[twIdx];
-//   if(!twDel){
-//     twCi++;
-//     twDisplay.innerHTML=ln.text.slice(0,twCi)+'<span id="tw-cursor"></span>';
-//     twSource.textContent=ln.source;twDot.style.background=ln.dot;
-//     if(twCi>=ln.text.length){twPaused=true;twDel=true;setTimeout(twTick,60);return;}
-//     setTimeout(twTick,36+Math.random()*20);
-//   } else {
-//     twCi--;
-//     twDisplay.innerHTML=ln.text.slice(0,twCi)+'<span id="tw-cursor"></span>';
-//     if(twCi<=0){
-//       twDel=false;twCi=0;twIdx=(twIdx+1)%TW_LINES.length;
-//       twUpdatePips(twIdx);setTimeout(twTick,380);return;
-//     }
-//     setTimeout(twTick,16);
-//   }
-// }
-// setTimeout(twTick,1000);
-// }
+// guard: only run engine if all required elements exist
+if(twDisplay && twSource && twDot && twPips){
+TW_LINES.forEach((_,i)=>{
+  const p=document.createElement('div');
+  p.className='tw-pip'+(i===0?' active':'');twPips.appendChild(p);
+});
+let twIdx=0,twCi=0,twDel=false,twPaused=false;
+function twUpdatePips(i){twPips.querySelectorAll('.tw-pip').forEach((p,j)=>p.classList.toggle('active',j===i));}
+function twTick(){
+  if(twPaused){setTimeout(twTick,1400);twPaused=false;return;}
+  const ln=TW_LINES[twIdx];
+  if(!twDel){
+    twCi++;
+    twDisplay.innerHTML=ln.text.slice(0,twCi)+'<span id="tw-cursor"></span>';
+    twSource.textContent=ln.source;twDot.style.background=ln.dot;
+    if(twCi>=ln.text.length){twPaused=true;twDel=true;setTimeout(twTick,60);return;}
+    setTimeout(twTick,36+Math.random()*20);
+  } else {
+    twCi--;
+    twDisplay.innerHTML=ln.text.slice(0,twCi)+'<span id="tw-cursor"></span>';
+    if(twCi<=0){
+      twDel=false;twCi=0;twIdx=(twIdx+1)%TW_LINES.length;
+      twUpdatePips(twIdx);setTimeout(twTick,380);return;
+    }
+    setTimeout(twTick,16);
+  }
+}
+setTimeout(twTick,1000);
+}
 /* ══════════════════════════════════════════
    FADE-IN-UP OBSERVER
 ══════════════════════════════════════════ */
@@ -1721,29 +1627,7 @@ document.addEventListener('DOMContentLoaded',function(){
     });
   },{threshold:0.5});
   counters.forEach(c=>observer.observe(c));
-
-  // back-to-top button behavior
-  const backBtn = document.getElementById('back-to-top');
-  window.addEventListener('scroll', ()=>{
-    if(window.scrollY > 300) backBtn.classList.add('show');
-    else backBtn.classList.remove('show');
-  });
-  backBtn.addEventListener('click', ()=>{
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
-});
-
-// hide loading screen when everything is loaded
-window.addEventListener('load', () => {
-  const loader = document.getElementById('loadingScreen');
-  if (loader) {
-    loader.classList.add('hide');
-    setTimeout(() => loader.remove(), 600);
-  }
 });
 </script>
-
-<button id="back-to-top" title="Back to top">↑</button>
-
 </body>
 </html>

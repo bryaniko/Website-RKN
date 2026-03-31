@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  
+  <!-- Main Page - Home -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Main Page - Vision & Mission Section -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/#vision-mission</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Main Page - Brands Section -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/#brands</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Main Page - History Section -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/#history</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Main Page - Activities Section -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/#activities</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Main Page - Contact Section -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/#contact</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+<!--   
+  <!-- Nangkring Seblak Brand Page -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/nagkring-Seblak.html</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Nangkring Seblak - Products Section -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/nagkring-Seblak.html#products</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Nangkring Seblak - About Section -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/nagkring-Seblak.html#about</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url> -->
+  
+</urlset>

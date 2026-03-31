@@ -1,0 +1,10 @@
+# Robots.txt for RKN - Rona Karya Nusantara
+# https://bryaniko.github.io/Website-RKN/
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://bryaniko.github.io/sitemap.xml
+
+# Crawl-delay (optional, in seconds)
+Crawl-delay: 1
