@@ -51,5 +51,29 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+<!--   
+  <!-- Nangkring Seblak Brand Page -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/nagkring-Seblak.html</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Nangkring Seblak - Products Section -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/nagkring-Seblak.html#products</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Nangkring Seblak - About Section -->
+  <url>
+    <loc>https://bryaniko.github.io/Website-RKN/nagkring-Seblak.html#about</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url> -->
   
 </urlset>

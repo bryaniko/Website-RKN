@@ -1,8 +1,0 @@
-sejarah perusahaan (belum)
-halaman brand banner (sudah)
-halaman kegiatan (sudah)
-halaman brand nagkring seblak (belum)
-visi misi & nilai (sudah)
-alamat RKN (sudah)
-logo RKN (sudah)
-halaman kegiatan (sudah)
